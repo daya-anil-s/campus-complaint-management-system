@@ -12,46 +12,54 @@ import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
 function Register() {
   const [role, setRole] = useState("student");
   const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] =
+    useState(false);
 
   const navigate = useNavigate();
 
- const handleRegister = () => {
-  if (role === "student") {
-    navigate("/student/dashboard");
-  } else {
-    navigate("/admin/dashboard");
-  }
-};
+  const handleRegister = () => {
+    if (role === "student") {
+      navigate("/student/dashboard");
+    } else {
+      navigate("/admin/dashboard");
+    }
+  };
 
   return (
-    <div className="min-h-screen bg-gray-200 flex items-center justify-center px-4 py-8">
-      <div className="w-full max-w-xl rounded-3xl bg-white shadow-xl p-8">
+    <div className="min-h-screen bg-gradient-to-br from-teal-50 via-white to-cyan-50 flex items-center justify-center px-4 py-10">
+      <div className="w-full max-w-lg bg-white rounded-[32px] shadow-2xl border border-gray-100 p-10">
 
-        {/* Heading */}
-        <div className="text-center">
-          <p className="text-orange-600 uppercase tracking-[4px] text-sm font-semibold">
+        {/* Header */}
+        <div className="text-center mb-8">
+
+          <div className="w-16 h-16 mx-auto mb-5 rounded-full bg-gradient-to-r from-teal-600 to-emerald-500 flex items-center justify-center shadow-lg">
+            <FaUserGraduate className="text-white text-2xl" />
+          </div>
+
+          <p className="text-orange-500 uppercase tracking-[5px] text-xs font-bold">
             Secure Portal
           </p>
 
-          <h1 className="mt-3 text-4xl md:text-5xl font-bold text-gray-900">
+          <h1 className="mt-3 text-5xl font-extrabold text-gray-900">
             Create Account
           </h1>
 
-          <p className="mt-2 text-gray-500 text-lg">
+          <p className="mt-3 text-gray-500">
             Create your student or administrator account.
           </p>
+
         </div>
 
         {/* Role Toggle */}
-        <div className="mt-7 flex rounded-2xl bg-gray-100 p-2">
+        <div className="flex rounded-3xl bg-gray-100 p-1.5 mb-8">
+
           <button
             type="button"
             onClick={() => setRole("student")}
-            className={`flex-1 flex items-center justify-center gap-2 rounded-xl py-3 font-semibold transition ${
+            className={`flex-1 flex items-center justify-center gap-2 rounded-2xl py-4 font-semibold transition-all duration-300 ${
               role === "student"
-                ? "bg-teal-700 text-white"
-                : "text-gray-700"
+                ? "bg-teal-600 text-white shadow-lg"
+                : "text-gray-600 hover:bg-white"
             }`}
           >
             <FaUserGraduate />
@@ -61,42 +69,43 @@ function Register() {
           <button
             type="button"
             onClick={() => setRole("admin")}
-            className={`flex-1 flex items-center justify-center gap-2 rounded-xl py-3 font-semibold transition ${
+            className={`flex-1 flex items-center justify-center gap-2 rounded-2xl py-4 font-semibold transition-all duration-300 ${
               role === "admin"
-                ? "bg-teal-700 text-white"
-                : "text-gray-700"
+                ? "bg-teal-600 text-white shadow-lg"
+                : "text-gray-600 hover:bg-white"
             }`}
           >
             <FaUserShield />
             Admin
           </button>
+
         </div>
 
         {/* Full Name */}
-        <div className="mt-7">
-          <label className="block mb-2 text-base font-semibold text-gray-900">
+        <div className="mb-5">
+          <label className="block mb-2 text-sm font-semibold text-gray-700">
             Full Name
           </label>
 
-          <div className="flex h-14 items-center rounded-xl border border-gray-300 px-4">
-            <FaUser className="mr-3 text-lg text-gray-500" />
+          <div className="flex items-center h-14 bg-white border-2 border-gray-200 rounded-xl px-4 shadow-sm focus-within:border-teal-600 focus-within:shadow-md transition-all">
+            <FaUser className="text-gray-400 text-lg" />
 
             <input
               type="text"
               placeholder="Enter your full name"
-              className="w-full bg-transparent text-base outline-none placeholder:text-gray-400"
+              className="w-full pl-3 bg-transparent outline-none text-gray-700"
             />
           </div>
         </div>
 
         {/* Email */}
-        <div className="mt-5">
-          <label className="block mb-2 text-base font-semibold text-gray-900">
+        <div className="mb-5">
+          <label className="block mb-2 text-sm font-semibold text-gray-700">
             Email Address
           </label>
 
-          <div className="flex h-14 items-center rounded-xl border border-gray-300 px-4">
-            <MdEmail className="mr-3 text-lg text-gray-500" />
+          <div className="flex items-center h-14 bg-white border-2 border-gray-200 rounded-xl px-4 shadow-sm focus-within:border-teal-600 focus-within:shadow-md transition-all">
+            <MdEmail className="text-gray-400 text-lg" />
 
             <input
               type="email"
@@ -105,53 +114,53 @@ function Register() {
                   ? "student@campus.edu"
                   : "admin@campus.edu"
               }
-              className="w-full bg-transparent text-base outline-none placeholder:text-gray-400"
+              className="w-full pl-3 bg-transparent outline-none text-gray-700"
             />
           </div>
         </div>
 
         {/* Password */}
-        <div className="mt-5">
-          <label className="block mb-2 text-base font-semibold text-gray-900">
+        <div className="mb-5">
+          <label className="block mb-2 text-sm font-semibold text-gray-700">
             Password
           </label>
 
-          <div className="flex h-14 items-center rounded-xl border border-gray-300 px-4">
-            <RiLockPasswordLine className="mr-3 text-lg text-gray-500" />
+          <div className="flex items-center h-14 bg-white border-2 border-gray-200 rounded-xl px-4 shadow-sm focus-within:border-teal-600 focus-within:shadow-md transition-all">
+            <RiLockPasswordLine className="text-gray-400 text-lg" />
 
             <input
               type={showPassword ? "text" : "password"}
               placeholder="Create a password"
-              className="w-full bg-transparent text-base outline-none placeholder:text-gray-400"
+              className="w-full pl-3 bg-transparent outline-none text-gray-700"
             />
 
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="text-gray-500"
+              className="text-gray-400 hover:text-teal-700"
             >
               {showPassword ? (
-                <IoEyeOutline size={22} />
+                <IoEyeOutline size={20} />
               ) : (
-                <IoEyeOffOutline size={22} />
+                <IoEyeOffOutline size={20} />
               )}
             </button>
           </div>
         </div>
 
         {/* Confirm Password */}
-        <div className="mt-5">
-          <label className="block mb-2 text-base font-semibold text-gray-900">
+        <div className="mb-6">
+          <label className="block mb-2 text-sm font-semibold text-gray-700">
             Confirm Password
           </label>
 
-          <div className="flex h-14 items-center rounded-xl border border-gray-300 px-4">
-            <RiLockPasswordLine className="mr-3 text-lg text-gray-500" />
+          <div className="flex items-center h-14 bg-white border-2 border-gray-200 rounded-xl px-4 shadow-sm focus-within:border-teal-600 focus-within:shadow-md transition-all">
+            <RiLockPasswordLine className="text-gray-400 text-lg" />
 
             <input
               type={showConfirmPassword ? "text" : "password"}
               placeholder="Confirm password"
-              className="w-full bg-transparent text-base outline-none placeholder:text-gray-400"
+              className="w-full pl-3 bg-transparent outline-none text-gray-700"
             />
 
             <button
@@ -159,12 +168,12 @@ function Register() {
               onClick={() =>
                 setShowConfirmPassword(!showConfirmPassword)
               }
-              className="text-gray-500"
+              className="text-gray-400 hover:text-teal-700"
             >
               {showConfirmPassword ? (
-                <IoEyeOutline size={22} />
+                <IoEyeOutline size={20} />
               ) : (
-                <IoEyeOffOutline size={22} />
+                <IoEyeOffOutline size={20} />
               )}
             </button>
           </div>
@@ -173,17 +182,17 @@ function Register() {
         {/* Register Button */}
         <button
           onClick={handleRegister}
-          className="w-full h-14 mt-6 rounded-xl bg-teal-700 text-lg font-semibold text-white hover:bg-teal-800 transition"
+          className="w-full h-14 rounded-full bg-gradient-to-r from-teal-600 to-emerald-500 text-white font-semibold text-lg shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all duration-300"
         >
           Create Account →
         </button>
 
         {/* Footer */}
-        <p className="mt-6 text-center text-gray-600">
+        <p className="mt-6 text-center text-sm text-gray-500">
           Already have an account?
           <Link
             to="/"
-            className="ml-2 font-semibold text-teal-700 hover:underline"
+            className="ml-2 font-semibold text-teal-600 hover:underline"
           >
             Sign In
           </Link>
