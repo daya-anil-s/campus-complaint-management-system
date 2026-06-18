@@ -29,7 +29,7 @@ function ComplaintList() {
     <div className="container mt-5">
 
       <Link
-        to="/dashboard"
+        to="/student/dashboard"
         className="btn btn-secondary mb-3"
       >
         ← Back to Dashboard
@@ -76,7 +76,7 @@ function ComplaintList() {
 
                   <td>
                     <Link
-                      to="/complaint-details"
+                     to={`/student/complaint/${complaint.id}`}
                       className="btn btn-sm btn-primary"
                     >
                       View Details

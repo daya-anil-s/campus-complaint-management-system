@@ -61,19 +61,19 @@ function StudentDashboard() {
       </div>
 
       <div className="text-center mt-5">
-        <Link
-          to="/complaint-form"
-          className="btn btn-primary me-3"
-        >
-          Submit Complaint
-        </Link>
+       <Link
+  to="/student/complaint"
+  className="btn btn-primary me-3"
+>
+  Submit Complaint
+</Link>
 
-        <Link
-          to="/complaints"
-          className="btn btn-outline-primary"
-        >
-          My Complaints
-        </Link>
+       <Link
+  to="/student/complaints"
+  className="btn btn-outline-primary"
+>
+  My Complaints
+</Link>
       </div>
 
       <div className="card shadow border-0 mt-5">
@@ -112,11 +112,11 @@ function StudentDashboard() {
 
                   <td>
                     <Link
-                      to="/complaint-details"
-                      className="btn btn-sm btn-primary"
-                    >
-                      View
-                    </Link>
+  to={`/student/complaint/${complaint.id}`}
+  className="btn btn-sm btn-primary"
+>
+  View
+</Link>
                   </td>
                 </tr>
               ))}

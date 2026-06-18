@@ -26,7 +26,7 @@ function ComplaintForm() {
     <div className="container mt-5">
 
       <Link
-        to="/dashboard"
+        to="/student/dashboard"
         className="btn btn-secondary mb-3"
       >
         ← Back to Dashboard

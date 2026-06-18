@@ -60,13 +60,13 @@ function ComplaintDetails() {
 
             <button
               className="btn btn-secondary"
-              onClick={() => navigate("/complaints")}
+              onClick={() => navigate("/student/complaints")}
             >
               ← Back to Complaints
             </button>
 
             <Link
-              to="/dashboard"
+              to="/student/dashboard"
               className="btn btn-outline-secondary ms-2"
             >
               Dashboard
