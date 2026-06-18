@@ -1,4 +1,16 @@
 import { Link } from "react-router-dom";
+import {
+  ButtonLink,
+  DataTable,
+  PageHeader,
+  PageShell,
+  StatusBadge,
+  TableCard,
+  TableHead,
+  TableRow,
+  Td,
+  Th,
+} from "../../components/ui";
 
 function ComplaintList() {
   const complaints = [
@@ -26,71 +38,52 @@ function ComplaintList() {
   ];
 
   return (
-    <div className="container mt-5">
+    <PageShell>
+      <PageHeader
+        eyebrow="Student"
+        title="My Complaints"
+        description="Review your submitted complaints and open any record for more detail."
+        actions={
+          <ButtonLink to="/student/dashboard" variant="secondary">
+            Back to Dashboard
+          </ButtonLink>
+        }
+      />
 
-      <Link
-        to="/student/dashboard"
-        className="btn btn-secondary mb-3"
-      >
-        ← Back to Dashboard
-      </Link>
-
-      <div className="card shadow border-0">
-        <div className="card-header bg-primary text-white">
-          <h3 className="mb-0 text-center">My Complaints</h3>
-        </div>
-
-        <div className="card-body">
-          <table className="table table-hover">
-            <thead>
-              <tr>
-                <th>Title</th>
-                <th>Category</th>
-                <th>Status</th>
-                <th>Date</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-
-            <tbody>
-              {complaints.map((complaint) => (
-                <tr key={complaint.id}>
-                  <td>{complaint.title}</td>
-                  <td>{complaint.category}</td>
-
-                  <td>
-                    <span
-                      className={`badge ${
-                        complaint.status === "Resolved"
-                          ? "bg-success"
-                          : complaint.status === "In Progress"
-                          ? "bg-primary"
-                          : "bg-warning text-dark"
-                      }`}
-                    >
-                      {complaint.status}
-                    </span>
-                  </td>
-
-                  <td>{complaint.date}</td>
-
-                  <td>
-                    <Link
-                     to={`/student/complaint/${complaint.id}`}
-                      className="btn btn-sm btn-primary"
-                    >
-                      View Details
-                    </Link>
-                  </td>
-
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-    </div>
+      <TableCard>
+        <DataTable>
+          <TableHead>
+            <tr>
+              <Th>Title</Th>
+              <Th>Category</Th>
+              <Th>Status</Th>
+              <Th>Date</Th>
+              <Th>Action</Th>
+            </tr>
+          </TableHead>
+          <tbody>
+            {complaints.map((complaint) => (
+              <TableRow key={complaint.id}>
+                <Td className="font-medium text-slate-900">{complaint.title}</Td>
+                <Td>{complaint.category}</Td>
+                <Td>
+                  <StatusBadge status={complaint.status} />
+                </Td>
+                <Td>{complaint.date}</Td>
+                <Td>
+                  <Link
+                    to={`/student/complaint/${complaint.id}`}
+                    className="font-semibold text-[#2563EB] no-underline hover:underline"
+                  >
+                    View Details
+                  </Link>
+                </Td>
+              </TableRow>
+            ))}
+          </tbody>
+        </DataTable>
+      </TableCard>
+    </PageShell>
   );
 }
 

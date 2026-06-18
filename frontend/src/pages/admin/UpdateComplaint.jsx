@@ -1,5 +1,13 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import {
+  Button,
+  ButtonLink,
+  Card,
+  Field,
+  PageHeader,
+  PageShell,
+} from "../../components/ui";
+import { inputClass, textareaClass } from "../../components/uiStyles";
 
 function UpdateComplaint() {
   const [status, setStatus] = useState("Pending");
@@ -7,102 +15,72 @@ function UpdateComplaint() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    alert(
-      `Complaint Updated!\nStatus: ${status}\nRemarks: ${remarks}`
-    );
+    alert(`Complaint Updated!\nStatus: ${status}\nRemarks: ${remarks}`);
   };
 
+  const details = [
+    ["Complaint Title", "WiFi Not Working"],
+    ["Student", "Vismaya"],
+    ["Category", "Internet/Wi-Fi"],
+    [
+      "Description",
+      "Internet connection is unavailable on the second floor of the library.",
+    ],
+  ];
+
   return (
-    <div className="container mt-5">
-
-      <Link
-        to="/admin/complaints"
-        className="btn btn-secondary mb-3"
-      >
-        ← Back to Complaints
-      </Link>
-
-      <div className="card shadow border-0">
-
-        <div className="card-header bg-primary text-white">
-          <h3 className="mb-0 text-center">
-            Update Complaint
-          </h3>
-        </div>
-
-        <div className="card-body">
-
-          <div className="mb-3">
-            <h5>Complaint Title</h5>
-            <p>WiFi Not Working</p>
-          </div>
-
-          <div className="mb-3">
-            <h5>Student</h5>
-            <p>Vismaya</p>
-          </div>
-
-          <div className="mb-3">
-            <h5>Category</h5>
-            <p>Internet/Wi-Fi</p>
-          </div>
-
-          <div className="mb-3">
-            <h5>Description</h5>
-            <p>
-              Internet connection is unavailable on the
-              second floor of the library.
-            </p>
-          </div>
-
-          <form onSubmit={handleSubmit}>
-
-            <div className="mb-3">
-              <label className="form-label">
-                Update Status
-              </label>
-
-              <select
-                className="form-select"
-                value={status}
-                onChange={(e) => setStatus(e.target.value)}
-              >
-                <option>Pending</option>
-                <option>In Progress</option>
-                <option>Resolved</option>
-              </select>
-            </div>
-
-            <div className="mb-3">
-              <label className="form-label">
-                Remarks
-              </label>
-
-              <textarea
-                rows="4"
-                className="form-control"
-                placeholder="Enter remarks..."
-                value={remarks}
-                onChange={(e) =>
-                  setRemarks(e.target.value)
-                }
-              />
-            </div>
-
-            <button
-              type="submit"
-              className="btn btn-primary w-100"
-            >
-              Save Update
-            </button>
-
-          </form>
-
-        </div>
+    <PageShell compact>
+      <div className="mb-6">
+        <ButtonLink to="/admin/complaints" variant="secondary">
+          Back to Complaints
+        </ButtonLink>
       </div>
 
-    </div>
+      <PageHeader
+        eyebrow="Admin"
+        title="Update Complaint"
+        description="Change the status and add internal remarks for the selected complaint."
+      />
+
+      <Card className="p-6 sm:p-8">
+        <div className="mb-8 grid gap-5 sm:grid-cols-2">
+          {details.map(([label, value]) => (
+            <div key={label} className={label === "Description" ? "sm:col-span-2" : ""}>
+              <h2 className="text-sm font-semibold text-slate-500">{label}</h2>
+              <p className="mt-1 text-base text-slate-950">{value}</p>
+            </div>
+          ))}
+        </div>
+
+        <form onSubmit={handleSubmit} className="space-y-5">
+          <Field label="Update Status">
+            <select
+              className={inputClass}
+              value={status}
+              onChange={(e) => setStatus(e.target.value)}
+            >
+              <option>Pending</option>
+              <option>In Progress</option>
+              <option>Resolved</option>
+            </select>
+          </Field>
+
+          <Field label="Remarks">
+            <textarea
+              rows="4"
+              className={textareaClass}
+              placeholder="Enter remarks"
+              value={remarks}
+              onChange={(e) => setRemarks(e.target.value)}
+            />
+          </Field>
+
+          <Button type="submit" className="w-full">
+            Save Update
+          </Button>
+        </form>
+      </Card>
+    </PageShell>
   );
 }
 
