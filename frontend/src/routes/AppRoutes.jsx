@@ -21,7 +21,6 @@ function AppRoutes() {
       <Route path="/register" element={<Register />} />
 
       {/* Added Dashboard Route */}
-      <Route path="/dashboard" element={<StudentDashboard />} />
 
       <Route path="/student/dashboard" element={<StudentDashboard />} />
       <Route path="/student/complaint" element={<ComplaintForm />} />

@@ -26,7 +26,12 @@ function AdminDashboard() {
     <div className="container mt-4">
 
       <div className="text-center mb-4">
-        <h1>Admin Dashboard</h1>
+     <div className="text-center mb-4">
+  <h1>Admin Dashboard 🛠️</h1>
+  <p className="text-muted">
+    Manage, track and resolve campus complaints efficiently.
+  </p>
+</div>
         <p className="text-muted">
           Manage and monitor all complaints.
         </p>

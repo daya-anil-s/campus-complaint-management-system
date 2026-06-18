@@ -16,9 +16,13 @@ function Register() {
 
   const navigate = useNavigate();
 
-  const handleRegister = () => {
-    navigate("/dashboard");
-  };
+ const handleRegister = () => {
+  if (role === "student") {
+    navigate("/student/dashboard");
+  } else {
+    navigate("/admin/dashboard");
+  }
+};
 
   return (
     <div className="min-h-screen bg-gray-200 flex items-center justify-center px-4 py-8">
