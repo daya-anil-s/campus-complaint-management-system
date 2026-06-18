@@ -242,5 +242,167 @@ label{
     align-items:flex-start;
   }
 }
+/* ===========================
+   ANIMATED BACKGROUND
+=========================== */
 
+.login-bg{
+  min-height:100vh;
+  background:linear-gradient(
+    -45deg,
+    #dff7f5,
+    #ecfeff,
+    #f0fdfa,
+    #ccfbf1
+  );
+  background-size:400% 400%;
+  animation:gradientAnimation 12s ease infinite;
+
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:40px;
+}
+
+@keyframes gradientAnimation{
+
+  0%{
+    background-position:0% 50%;
+  }
+
+  50%{
+    background-position:100% 50%;
+  }
+
+  100%{
+    background-position:0% 50%;
+  }
+
+}
+
+/* ===========================
+   PROFESSIONAL CARD
+=========================== */
+
+.login-card,
+.register-card{
+
+  width:650px;
+  max-width:100%;
+
+  background:rgba(255,255,255,0.92);
+
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+
+  border-radius:28px;
+
+  border:1px solid rgba(255,255,255,0.4);
+
+  box-shadow:
+    0 20px 60px rgba(15,118,110,.15),
+    0 8px 30px rgba(0,0,0,.08);
+
+  padding:40px;
+}
+
+/* ===========================
+   INPUT ANIMATION
+=========================== */
+
+.input-box{
+  display:flex;
+  align-items:center;
+
+  height:60px;
+
+  background:#fff;
+
+  border:1px solid #d1d5db;
+
+  border-radius:16px;
+
+  padding:0 18px;
+
+  transition:all .3s ease;
+}
+
+.input-box:hover{
+  border-color:#14b8a6;
+}
+
+.input-box:focus-within{
+
+  border-color:#0f766e;
+
+  box-shadow:
+    0 0 0 4px rgba(20,184,166,.12);
+
+  transform:translateY(-2px);
+}
+
+/* ===========================
+   BUTTON EFFECT
+=========================== */
+
+.login-btn,
+.register-btn{
+
+  width:100%;
+
+  height:58px;
+
+  border:none;
+
+  border-radius:16px;
+
+  background:linear-gradient(
+    135deg,
+    #0f766e,
+    #14b8a6
+  );
+
+  color:white;
+
+  font-size:18px;
+
+  font-weight:700;
+
+  cursor:pointer;
+
+  transition:all .3s ease;
+}
+
+.login-btn:hover,
+.register-btn:hover{
+
+  transform:translateY(-3px);
+
+  box-shadow:
+    0 12px 30px rgba(20,184,166,.35);
+}
+
+/* ===========================
+   ROLE SWITCH
+=========================== */
+
+.role-switch{
+  background:#f3f4f6;
+  border-radius:18px;
+  padding:8px;
+}
+
+.role-switch .active{
+
+  background:linear-gradient(
+    135deg,
+    #0f766e,
+    #14b8a6
+  );
+
+  color:white;
+
+  box-shadow:
+    0 8px 20px rgba(20,184,166,.25);
+}
 
