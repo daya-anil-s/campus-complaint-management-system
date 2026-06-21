@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Button,
   ButtonLink,
@@ -8,14 +9,24 @@ import {
   PageShell,
 } from "../../components/ui";
 import { inputClass, textareaClass } from "../../components/uiStyles";
+import { useToast } from "../../components/toastContext";
 
 function UpdateComplaint() {
   const [status, setStatus] = useState("Pending");
   const [remarks, setRemarks] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
+  const { showSuccess } = useToast();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    alert(`Complaint Updated!\nStatus: ${status}\nRemarks: ${remarks}`);
+    setIsLoading(true);
+    try {
+      await new Promise((resolve) => window.setTimeout(resolve, 300));
+      showSuccess("Complaint updated successfully.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const details = [
@@ -75,9 +86,14 @@ function UpdateComplaint() {
             />
           </Field>
 
-          <Button type="submit" className="w-full">
-            Save Update
-          </Button>
+          <div className="flex gap-3">
+            <Button type="button" variant="secondary" className="w-full" onClick={() => navigate(-1)} disabled={isLoading}>
+              Cancel
+            </Button>
+            <Button type="submit" className="w-full" disabled={isLoading}>
+              {isLoading ? "Updating..." : "Update Complaint"}
+            </Button>
+          </div>
         </form>
       </Card>
     </PageShell>

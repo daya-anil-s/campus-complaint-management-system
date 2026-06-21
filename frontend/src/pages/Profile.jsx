@@ -1,8 +1,9 @@
 import { Card, PageHeader, PageShell } from "../components/ui";
-import { getCurrentUser } from "../utils/auth";
+import { getCurrentUser, getRoleLabel } from "../utils/auth";
 
 function Profile() {
   const user = getCurrentUser();
+  const roleLabel = getRoleLabel(user?.role);
 
   return (
     <PageShell compact>
@@ -15,7 +16,7 @@ function Profile() {
         <dl className="space-y-5">
           <div>
             <dt className="text-sm font-semibold text-slate-500">Name</dt>
-            <dd className="mt-1 text-base text-slate-950">{user?.name || "Student"}</dd>
+            <dd className="mt-1 text-base text-slate-950">{user?.name || roleLabel}</dd>
           </div>
           <div>
             <dt className="text-sm font-semibold text-slate-500">Email</dt>
@@ -23,7 +24,7 @@ function Profile() {
           </div>
           <div>
             <dt className="text-sm font-semibold text-slate-500">Role</dt>
-            <dd className="mt-1 capitalize text-base text-slate-950">{user?.role}</dd>
+            <dd className="mt-1 text-base text-slate-950">{roleLabel}</dd>
           </div>
         </dl>
       </Card>

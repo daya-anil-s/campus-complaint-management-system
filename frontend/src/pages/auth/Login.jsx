@@ -6,6 +6,7 @@ import { RiLockPasswordLine } from "react-icons/ri";
 import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
 import { Button } from "../../components/ui";
 import { findRegisteredUser, setCurrentUser } from "../../utils/auth";
+import { useToast } from "../../components/toastContext";
 
 function Login() {
   const [role, setRole] = useState("student");
@@ -14,10 +15,12 @@ function Login() {
   const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const navigate = useNavigate();
+  const { showSuccess } = useToast();
 
-  const handleLogin = (event) => {
+  const handleLogin = async (event) => {
     event.preventDefault();
     let valid = true;
 
@@ -38,13 +41,15 @@ function Login() {
     }
 
     if (valid) {
-      const registeredUser = findRegisteredUser(email, role);
-      setCurrentUser(registeredUser || { name: "", email, role });
-
-      if (role === "student") {
-        navigate("/student/dashboard");
-      } else {
-        navigate("/admin/dashboard");
+      setIsLoading(true);
+      try {
+        await new Promise((resolve) => window.setTimeout(resolve, 300));
+        const registeredUser = findRegisteredUser(email, role);
+        setCurrentUser(registeredUser || { name: "", email, role });
+        showSuccess("Signed in successfully.");
+        navigate(role === "student" ? "/student/dashboard" : "/admin/dashboard");
+      } finally {
+        setIsLoading(false);
       }
     }
   };
@@ -161,8 +166,12 @@ function Login() {
             </a>
           </div>
 
-          <Button type="submit" className="w-full">
-            {role === "student" ? "Student Sign In" : "Admin Sign In"}
+          <Button type="submit" className="w-full" disabled={isLoading}>
+            {isLoading
+              ? "Signing In..."
+              : role === "student"
+                ? "Student Sign In"
+                : "Admin Sign In"}
           </Button>
         </form>
 

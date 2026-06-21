@@ -8,9 +8,11 @@ import {
   PageShell,
 } from "../../components/ui";
 import { inputClass, textareaClass } from "../../components/uiStyles";
+import { useToast } from "../../components/toastContext";
 
 function ComplaintForm() {
-  const [success, setSuccess] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const { showSuccess } = useToast();
   const [formData, setFormData] = useState({
     title: "",
     category: "",
@@ -25,19 +27,17 @@ function ComplaintForm() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
-    setSuccess(true);
-    setFormData({
-      title: "",
-      category: "",
-      location: "",
-      description: "",
-    });
-    setTimeout(() => {
-      setSuccess(false);
-    }, 3000);
+    setIsLoading(true);
+    try {
+      await new Promise((resolve) => window.setTimeout(resolve, 300));
+      console.log(formData);
+      setFormData({ title: "", category: "", location: "", description: "" });
+      showSuccess("Complaint submitted successfully.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -53,12 +53,6 @@ function ComplaintForm() {
         title="Submit Complaint"
         description="Share the complaint details so the campus team can review and respond."
       />
-
-      {success && (
-        <div className="mb-6 rounded-xl border border-blue-100 bg-blue-50 px-4 py-3 text-sm font-medium text-[#2563EB]">
-          Complaint submitted successfully.
-        </div>
-      )}
 
       <Card className="p-6 sm:p-8">
         <form onSubmit={handleSubmit} className="space-y-5">
@@ -119,8 +113,8 @@ function ComplaintForm() {
             />
           </Field>
 
-          <Button type="submit" className="w-full">
-            Submit Complaint
+          <Button type="submit" className="w-full" disabled={isLoading}>
+            {isLoading ? "Submitting..." : "Submit Complaint"}
           </Button>
         </form>
       </Card>

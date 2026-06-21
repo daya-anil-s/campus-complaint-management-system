@@ -141,6 +141,15 @@ export function DataTable({ children }) {
   );
 }
 
+export function EmptyState({ message = "No complaints found.", description }) {
+  return (
+    <div className="px-6 py-12 text-center">
+      <p className="text-base font-semibold text-slate-950">{message}</p>
+      {description && <p className="mt-2 text-sm text-slate-600">{description}</p>}
+    </div>
+  );
+}
+
 export function TableHead({ children }) {
   return (
     <thead className="border-b border-slate-200 bg-slate-50 text-xs font-semibold uppercase tracking-wide text-slate-500">

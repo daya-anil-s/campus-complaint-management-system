@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import {
   ButtonLink,
   DataTable,
+  EmptyState,
   PageHeader,
   PageShell,
   StatusBadge,
@@ -51,6 +52,9 @@ function ComplaintList() {
       />
 
       <TableCard>
+        {complaints.length === 0 ? (
+          <EmptyState description="Submit your first complaint to get started." />
+        ) : (
         <DataTable>
           <TableHead>
             <tr>
@@ -82,6 +86,7 @@ function ComplaintList() {
             ))}
           </tbody>
         </DataTable>
+        )}
       </TableCard>
     </PageShell>
   );

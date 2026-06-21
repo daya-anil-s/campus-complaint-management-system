@@ -64,3 +64,7 @@ export function findRegisteredUser(email, role) {
 export function clearCurrentUser() {
   localStorage.removeItem(AUTH_USER_KEY);
 }
+
+export function getRoleLabel(role) {
+  return role ? role.charAt(0).toUpperCase() + role.slice(1) : "";
+}

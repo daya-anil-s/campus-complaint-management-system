@@ -6,6 +6,7 @@ import { RiLockPasswordLine } from "react-icons/ri";
 import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
 import { Button } from "../../components/ui";
 import { saveRegisteredUser } from "../../utils/auth";
+import { useToast } from "../../components/toastContext";
 
 function Register() {
   const [role, setRole] = useState("student");
@@ -18,14 +19,16 @@ function Register() {
     confirmPassword: "",
   });
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const navigate = useNavigate();
+  const { showSuccess } = useToast();
 
   const handleChange = (event) => {
     setFormData((current) => ({ ...current, [event.target.name]: event.target.value }));
   };
 
-  const handleRegister = (event) => {
+  const handleRegister = async (event) => {
     event.preventDefault();
     setError("");
 
@@ -44,12 +47,14 @@ function Register() {
       return;
     }
 
-    saveRegisteredUser({ name: formData.name, email: formData.email, role });
-
-    if (role === "student") {
-      navigate("/student/dashboard");
-    } else {
-      navigate("/admin/dashboard");
+    setIsLoading(true);
+    try {
+      await new Promise((resolve) => window.setTimeout(resolve, 300));
+      saveRegisteredUser({ name: formData.name, email: formData.email, role });
+      showSuccess("Account created successfully.");
+      navigate(role === "student" ? "/student/dashboard" : "/admin/dashboard");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -201,8 +206,8 @@ function Register() {
             <p className="mt-5 text-sm font-medium text-[#2563EB]">{error}</p>
           )}
 
-          <Button type="submit" className="mt-6 w-full">
-            Create Account
+          <Button type="submit" className="mt-6 w-full" disabled={isLoading}>
+            {isLoading ? "Creating Account..." : "Create Account"}
           </Button>
         </form>
 

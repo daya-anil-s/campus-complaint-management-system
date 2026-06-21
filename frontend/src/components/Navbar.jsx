@@ -1,14 +1,16 @@
 import { useEffect, useRef, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { FaChevronDown, FaUserCircle } from "react-icons/fa";
-import { clearCurrentUser, getCurrentUser } from "../utils/auth";
+import { clearCurrentUser, getCurrentUser, getRoleLabel } from "../utils/auth";
+import { useToast } from "./toastContext";
 
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef(null);
   const navigate = useNavigate();
+  const { showSuccess } = useToast();
   const user = getCurrentUser();
-  const displayName = user?.name || "Student";
+  const displayName = user?.name || getRoleLabel(user?.role);
 
   const links =
     user?.role === "admin"
@@ -35,6 +37,7 @@ function Navbar() {
     clearCurrentUser();
     setIsOpen(false);
     navigate("/", { replace: true });
+    showSuccess("Logged out successfully.");
   };
 
   return (
