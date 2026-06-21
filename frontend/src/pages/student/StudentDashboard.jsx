@@ -1,11 +1,5 @@
 import { Link } from "react-router-dom";
-import {
-  FaCheckCircle,
-  FaClipboardList,
-  FaClock,
-  FaSearch,
-  FaUserCircle,
-} from "react-icons/fa";
+import { FaCheckCircle, FaClipboardList, FaClock, FaSearch } from "react-icons/fa";
 import {
   ButtonLink,
   DataTable,
@@ -19,8 +13,10 @@ import {
   Td,
   Th,
 } from "../../components/ui";
+import { getCurrentUser } from "../../utils/auth";
 
 function StudentDashboard() {
+  const user = getCurrentUser();
   const complaints = [
     { id: 1, title: "WiFi Not Working", status: "Pending" },
     { id: 2, title: "Broken Fan", status: "In Progress" },
@@ -29,24 +25,18 @@ function StudentDashboard() {
 
   return (
     <PageShell>
-      <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex h-11 items-center gap-3 rounded-xl border border-slate-200 bg-white px-4 shadow-sm sm:w-80">
-          <FaSearch className="text-slate-400" />
-          <input
-            type="text"
-            placeholder="Search complaints"
-            className="w-full border-0 bg-transparent text-sm outline-none placeholder:text-slate-400"
-          />
-        </div>
-        <div className="flex items-center gap-3 text-slate-600">
-          <span className="text-sm font-medium">Student</span>
-          <FaUserCircle size={36} className="text-[#2563EB]" />
-        </div>
+      <div className="mb-8 flex h-11 items-center gap-3 rounded-xl border border-slate-200 bg-white px-4 shadow-sm sm:w-80">
+        <FaSearch className="text-slate-400" />
+        <input
+          type="text"
+          placeholder="Search complaints"
+          className="w-full border-0 bg-transparent text-sm outline-none placeholder:text-slate-400"
+        />
       </div>
 
       <PageHeader
         eyebrow="Student Dashboard"
-        title="Welcome back"
+        title={user?.name ? `Welcome back, ${user.name}` : "Welcome back"}
         description="Track submitted complaints, review status updates, and create a new complaint from one dashboard."
         actions={
           <>

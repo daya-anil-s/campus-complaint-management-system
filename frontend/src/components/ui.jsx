@@ -1,12 +1,16 @@
 import { Link } from "react-router-dom";
+import Navbar from "./Navbar";
 
 export function PageShell({ children, compact = false }) {
   return (
-    <main className="min-h-screen bg-[#F8FAFC] px-4 py-6 text-slate-900 sm:px-6 lg:px-8">
-      <div className={`mx-auto w-full ${compact ? "max-w-xl" : "max-w-7xl"}`}>
-        {children}
-      </div>
-    </main>
+    <div className="min-h-screen bg-[#F8FAFC] text-slate-900">
+      <Navbar />
+      <main className="px-4 py-6 sm:px-6 lg:px-8">
+        <div className={`mx-auto w-full ${compact ? "max-w-xl" : "max-w-7xl"}`}>
+          {children}
+        </div>
+      </main>
+    </div>
   );
 }
 

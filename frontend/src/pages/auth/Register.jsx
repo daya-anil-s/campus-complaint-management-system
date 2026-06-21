@@ -5,15 +5,47 @@ import { MdEmail } from "react-icons/md";
 import { RiLockPasswordLine } from "react-icons/ri";
 import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
 import { Button } from "../../components/ui";
+import { saveRegisteredUser } from "../../utils/auth";
 
 function Register() {
   const [role, setRole] = useState("student");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+  const [error, setError] = useState("");
 
   const navigate = useNavigate();
 
-  const handleRegister = () => {
+  const handleChange = (event) => {
+    setFormData((current) => ({ ...current, [event.target.name]: event.target.value }));
+  };
+
+  const handleRegister = (event) => {
+    event.preventDefault();
+    setError("");
+
+    if (!formData.name.trim() || !formData.email.trim() || !formData.password) {
+      setError("Name, email, and password are required.");
+      return;
+    }
+
+    if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      setError("Please enter a valid email address.");
+      return;
+    }
+
+    if (formData.password !== formData.confirmPassword) {
+      setError("Passwords do not match.");
+      return;
+    }
+
+    saveRegisteredUser({ name: formData.name, email: formData.email, role });
+
     if (role === "student") {
       navigate("/student/dashboard");
     } else {
@@ -72,14 +104,22 @@ function Register() {
           </button>
         </div>
 
-        <div className="space-y-5">
+        <form onSubmit={handleRegister}>
+          <div className="space-y-5">
           <div>
             <label className="mb-2 block text-sm font-semibold text-slate-700">
               Full Name
             </label>
             <div className={inputWrap}>
               <FaUser className="text-slate-400" />
-              <input type="text" placeholder="Enter your full name" className={input} />
+              <input
+                type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                placeholder="Enter your full name"
+                className={input}
+              />
             </div>
           </div>
 
@@ -91,6 +131,9 @@ function Register() {
               <MdEmail className="text-slate-400" />
               <input
                 type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
                 placeholder={
                   role === "student" ? "student@campus.edu" : "admin@campus.edu"
                 }
@@ -107,6 +150,9 @@ function Register() {
               <RiLockPasswordLine className="text-slate-400" />
               <input
                 type={showPassword ? "text" : "password"}
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
                 placeholder="Create a password"
                 className={input}
               />
@@ -129,6 +175,9 @@ function Register() {
               <RiLockPasswordLine className="text-slate-400" />
               <input
                 type={showConfirmPassword ? "text" : "password"}
+                name="confirmPassword"
+                value={formData.confirmPassword}
+                onChange={handleChange}
                 placeholder="Confirm password"
                 className={input}
               />
@@ -146,11 +195,16 @@ function Register() {
               </button>
             </div>
           </div>
-        </div>
+          </div>
 
-        <Button onClick={handleRegister} className="mt-6 w-full">
-          Create Account
-        </Button>
+          {error && (
+            <p className="mt-5 text-sm font-medium text-[#2563EB]">{error}</p>
+          )}
+
+          <Button type="submit" className="mt-6 w-full">
+            Create Account
+          </Button>
+        </form>
 
         <div className="my-6 flex items-center">
           <div className="flex-1 border-t border-slate-200" />

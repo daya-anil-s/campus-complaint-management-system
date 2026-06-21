@@ -5,6 +5,7 @@ import { MdEmail } from "react-icons/md";
 import { RiLockPasswordLine } from "react-icons/ri";
 import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
 import { Button } from "../../components/ui";
+import { findRegisteredUser, setCurrentUser } from "../../utils/auth";
 
 function Login() {
   const [role, setRole] = useState("student");
@@ -16,7 +17,8 @@ function Login() {
 
   const navigate = useNavigate();
 
-  const handleLogin = () => {
+  const handleLogin = (event) => {
+    event.preventDefault();
     let valid = true;
 
     setEmailError("");
@@ -36,6 +38,9 @@ function Login() {
     }
 
     if (valid) {
+      const registeredUser = findRegisteredUser(email, role);
+      setCurrentUser(registeredUser || { name: "", email, role });
+
       if (role === "student") {
         navigate("/student/dashboard");
       } else {
@@ -88,7 +93,8 @@ function Login() {
           </button>
         </div>
 
-        <div className="space-y-5">
+        <form onSubmit={handleLogin}>
+          <div className="space-y-5">
           <div>
             <label className="mb-2 block text-sm font-semibold text-slate-700">
               Email address
@@ -97,6 +103,7 @@ function Login() {
               <MdEmail className="text-slate-400" size={20} />
               <input
                 type="email"
+                name="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder={
@@ -118,6 +125,7 @@ function Login() {
               <RiLockPasswordLine className="text-slate-400" size={20} />
               <input
                 type={showPassword ? "text" : "password"}
+                name="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Enter password"
@@ -138,24 +146,25 @@ function Login() {
               </p>
             )}
           </div>
-        </div>
+          </div>
 
-        <div className="my-6 flex flex-col gap-3 text-sm text-slate-600 sm:flex-row sm:items-center sm:justify-between">
-          <label className="flex items-center gap-2">
-            <input
-              type="checkbox"
-              className="h-4 w-4 rounded border-slate-300 accent-[#2563EB]"
-            />
-            Remember me
-          </label>
-          <a href="#" className="font-semibold text-[#2563EB] no-underline hover:underline">
-            Forgot password?
-          </a>
-        </div>
+          <div className="my-6 flex flex-col gap-3 text-sm text-slate-600 sm:flex-row sm:items-center sm:justify-between">
+            <label className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                className="h-4 w-4 rounded border-slate-300 accent-[#2563EB]"
+              />
+              Remember me
+            </label>
+            <a href="#" className="font-semibold text-[#2563EB] no-underline hover:underline">
+              Forgot password?
+            </a>
+          </div>
 
-        <Button onClick={handleLogin} className="w-full">
-          {role === "student" ? "Student Sign In" : "Admin Sign In"}
-        </Button>
+          <Button type="submit" className="w-full">
+            {role === "student" ? "Student Sign In" : "Admin Sign In"}
+          </Button>
+        </form>
 
         <p className="mt-6 text-center text-sm text-slate-600">
           {role === "student" ? (
