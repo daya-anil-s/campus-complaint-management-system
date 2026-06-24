@@ -9,6 +9,7 @@ import {
 } from "../../components/ui";
 import { inputClass, textareaClass } from "../../components/uiStyles";
 import { useToast } from "../../components/toastContext";
+import api from "../../services/api";
 
 function ComplaintForm() {
   const [isLoading, setIsLoading] = useState(false);
@@ -31,8 +32,10 @@ function ComplaintForm() {
     e.preventDefault();
     setIsLoading(true);
     try {
-      await new Promise((resolve) => window.setTimeout(resolve, 300));
-      console.log(formData);
+      await api.post("/complaints", {
+  ...formData,
+  status: "Pending",
+});
       setFormData({ title: "", category: "", location: "", description: "" });
       showSuccess("Complaint submitted successfully.");
     } finally {

@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
-import { FaCheckCircle, FaClipboardList, FaClock, FaSearch } from "react-icons/fa";
+import { useEffect, useState } from "react";
+import api from "../../services/api";import { FaCheckCircle, FaClipboardList, FaClock, FaSearch } from "react-icons/fa";
 import {
   ButtonLink,
   DataTable,
@@ -17,11 +18,30 @@ import { getCurrentUser } from "../../utils/auth";
 
 function StudentDashboard() {
   const user = getCurrentUser();
-  const complaints = [
-    { id: 1, title: "WiFi Not Working", status: "Pending" },
-    { id: 2, title: "Broken Fan", status: "In Progress" },
-    { id: 3, title: "Water Supply Issue", status: "Resolved" },
-  ];
+  const [stats, setStats] = useState({
+  total: 0,
+  pending: 0,
+  resolved: 0,
+  inProgress: 0,
+});
+
+const [complaints, setComplaints] = useState([]);
+useEffect(() => {
+  const fetchData = async () => {
+    try {
+      const statsRes = await api.get("/dashboard/stats");
+      setStats(statsRes.data);
+
+      const complaintsRes = await api.get("/complaints");
+      setComplaints(complaintsRes.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  fetchData();
+}, []);
+  
 
   return (
     <PageShell>
@@ -49,9 +69,23 @@ function StudentDashboard() {
       />
 
       <div className="mb-8 grid gap-4 md:grid-cols-3">
-        <StatCard icon={FaClipboardList} label="Total Complaints" value="12" />
-        <StatCard icon={FaClock} label="Pending" value="5" />
-        <StatCard icon={FaCheckCircle} label="Resolved" value="7" />
+        <StatCard
+  icon={FaClipboardList}
+  label="Total Complaints"
+  value={stats.total}
+/>
+
+<StatCard
+  icon={FaClock}
+  label="Pending"
+  value={stats.pending}
+/>
+
+<StatCard
+  icon={FaCheckCircle}
+  label="Resolved"
+  value={stats.resolved}
+/>
       </div>
 
       <TableCard title="Recent Complaints">
@@ -65,15 +99,14 @@ function StudentDashboard() {
           </TableHead>
           <tbody>
             {complaints.map((complaint) => (
-              <TableRow key={complaint.id}>
+              <TableRow key={complaint._id}>
                 <Td className="font-medium text-slate-900">{complaint.title}</Td>
                 <Td>
                   <StatusBadge status={complaint.status} />
                 </Td>
                 <Td>
                   <Link
-                    to={`/student/complaint/${complaint.id}`}
-                    className="font-semibold text-[#2563EB] no-underline hover:underline"
+to={`/student/complaint/${complaint._id}`}                    className="font-semibold text-[#2563EB] no-underline hover:underline"
                   >
                     View
                   </Link>

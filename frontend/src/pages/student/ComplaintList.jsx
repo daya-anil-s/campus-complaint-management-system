@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
-import {
+import { useEffect, useState } from "react";
+import api from "../../services/api";import {
   ButtonLink,
   DataTable,
   EmptyState,
@@ -14,30 +15,19 @@ import {
 } from "../../components/ui";
 
 function ComplaintList() {
-  const complaints = [
-    {
-      id: 1,
-      title: "WiFi Not Working",
-      category: "Internet/Wi-Fi",
-      status: "Pending",
-      date: "17-06-2026",
-    },
-    {
-      id: 2,
-      title: "Broken Fan",
-      category: "Classroom",
-      status: "In Progress",
-      date: "15-06-2026",
-    },
-    {
-      id: 3,
-      title: "Water Supply Issue",
-      category: "Hostel",
-      status: "Resolved",
-      date: "12-06-2026",
-    },
-  ];
+  const [complaints, setComplaints] = useState([]);
+useEffect(() => {
+  const fetchComplaints = async () => {
+    try {
+      const res = await api.get("/complaints");
+      setComplaints(res.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
+  fetchComplaints();
+}, []);
   return (
     <PageShell>
       <PageHeader
@@ -67,16 +57,18 @@ function ComplaintList() {
           </TableHead>
           <tbody>
             {complaints.map((complaint) => (
-              <TableRow key={complaint.id}>
+              <TableRow key={complaint._id}>
                 <Td className="font-medium text-slate-900">{complaint.title}</Td>
                 <Td>{complaint.category}</Td>
                 <Td>
                   <StatusBadge status={complaint.status} />
                 </Td>
-                <Td>{complaint.date}</Td>
+                <Td>
+  {new Date(complaint.createdAt).toLocaleDateString()}
+</Td>
                 <Td>
                   <Link
-                    to={`/student/complaint/${complaint.id}`}
+                   to={`/student/complaint/${complaint._id}`}
                     className="font-semibold text-[#2563EB] no-underline hover:underline"
                   >
                     View Details
