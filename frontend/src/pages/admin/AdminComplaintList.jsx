@@ -1,4 +1,7 @@
+import { useEffect, useState } from "react";
+import axios from "axios";
 import { Link } from "react-router-dom";
+
 import {
   ButtonLink,
   DataTable,
@@ -14,32 +17,42 @@ import {
 } from "../../components/ui";
 
 function AdminComplaintList() {
-  const complaints = [
-    {
-      id: 1,
-      title: "WiFi Not Working",
-      student: "Vismaya",
-      category: "Internet/Wi-Fi",
-      status: "Pending",
-      date: "17-06-2026",
-    },
-    {
-      id: 2,
-      title: "Broken Fan",
-      student: "Rahul",
-      category: "Classroom",
-      status: "In Progress",
-      date: "15-06-2026",
-    },
-    {
-      id: 3,
-      title: "Water Supply Issue",
-      student: "Anu",
-      category: "Hostel",
-      status: "Resolved",
-      date: "12-06-2026",
-    },
-  ];
+  const [complaints, setComplaints] = useState([]);
+  const [search, setSearch] = useState("");
+  const [statusFilter, setStatusFilter] = useState("All");
+  useEffect(() => {
+    fetchComplaints();
+  }, []);
+
+  const fetchComplaints = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:3001/api/complaints"
+      );
+
+      setComplaints(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  const filteredComplaints = complaints.filter((complaint) => {
+  const matchesSearch =
+    complaint.title
+      .toLowerCase()
+      .includes(search.toLowerCase()) ||
+    complaint.category
+      .toLowerCase()
+      .includes(search.toLowerCase()) ||
+    complaint.description
+      .toLowerCase()
+      .includes(search.toLowerCase());
+
+  const matchesStatus =
+    statusFilter === "All" ||
+    complaint.status === statusFilter;
+
+  return matchesSearch && matchesStatus;
+});
 
   return (
     <PageShell>
@@ -48,49 +61,94 @@ function AdminComplaintList() {
         title="All Complaints"
         description="Review every submitted complaint and open a record to update its status."
         actions={
-          <ButtonLink to="/admin/dashboard" variant="secondary">
+          <ButtonLink
+            to="/admin/dashboard"
+            variant="secondary"
+          >
             Back to Dashboard
           </ButtonLink>
         }
       />
 
       <TableCard>
-        {complaints.length === 0 ? (
+        <div className="mb-6 flex flex-col gap-4 md:flex-row">
+  <input
+    type="text"
+    placeholder="🔍 Search complaints..."
+    className="flex-1 rounded-lg border border-gray-300 p-2 outline-none focus:border-blue-500"
+    value={search}
+    onChange={(e) => setSearch(e.target.value)}
+  />
+
+  <select
+    className="rounded-lg border border-gray-300 p-2"
+    value={statusFilter}
+    onChange={(e) => setStatusFilter(e.target.value)}
+  >
+    <option value="All">All Status</option>
+    <option value="Pending">Pending</option>
+    <option value="In Progress">In Progress</option>
+    <option value="Resolved">Resolved</option>
+  </select>
+</div>
+        {filteredComplaints.length === 0 ? (
           <EmptyState description="Submitted complaints will appear here." />
         ) : (
-        <DataTable>
-          <TableHead>
-            <tr>
-              <Th>Title</Th>
-              <Th>Student</Th>
-              <Th>Category</Th>
-              <Th>Status</Th>
-              <Th>Date</Th>
-              <Th>Action</Th>
-            </tr>
-          </TableHead>
-          <tbody>
-            {complaints.map((complaint) => (
-              <TableRow key={complaint.id}>
-                <Td className="font-medium text-slate-900">{complaint.title}</Td>
-                <Td>{complaint.student}</Td>
-                <Td>{complaint.category}</Td>
-                <Td>
-                  <StatusBadge status={complaint.status} />
-                </Td>
-                <Td>{complaint.date}</Td>
-                <Td>
-                  <Link
-                    to={`/admin/update/${complaint.id}`}
-                    className="font-semibold text-[#2563EB] no-underline hover:underline"
-                  >
-                    Update
-                  </Link>
-                </Td>
-              </TableRow>
-            ))}
-          </tbody>
-        </DataTable>
+          <DataTable>
+            <TableHead>
+              <tr>
+                <Th>Title</Th>
+               <Th>Category</Th>
+                <Th>Priority</Th>
+                <Th>Status</Th>
+                <Th>Date</Th>
+                <Th>Action</Th>
+              </tr>
+            </TableHead>
+
+            <tbody>
+              {filteredComplaints.map((complaint) => (
+                <TableRow key={complaint._id}>
+                  <Td className="font-medium text-slate-900">
+                    {complaint.title}
+                  </Td>
+
+                 <Td>{complaint.category}</Td>
+
+<Td>
+  <span
+    className={`rounded-full px-3 py-1 text-xs font-semibold ${
+      complaint.priority === "High"
+        ? "bg-red-100 text-red-700"
+        : complaint.priority === "Medium"
+        ? "bg-yellow-100 text-yellow-700"
+        : "bg-green-100 text-green-700"
+    }`}
+  >
+    {complaint.priority}
+  </span>
+</Td>
+
+<Td>
+  <StatusBadge status={complaint.status} />
+</Td> 
+
+                  <Td>
+                   {new Date(complaint.createdAt).toLocaleDateString("en-GB")}
+                  </Td>
+
+                  <Td>
+                    <Link
+                      to={`/admin/update/${complaint._id}`}
+                      className="font-semibold text-[#2563EB] no-underline hover:underline"
+                    >
+                      Update
+                    </Link>
+                  </Td>
+                </TableRow>
+              ))}
+            </tbody>
+          </DataTable>
         )}
       </TableCard>
     </PageShell>

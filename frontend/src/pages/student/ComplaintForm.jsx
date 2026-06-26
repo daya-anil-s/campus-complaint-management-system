@@ -15,11 +15,12 @@ function ComplaintForm() {
   const [isLoading, setIsLoading] = useState(false);
   const { showSuccess } = useToast();
   const [formData, setFormData] = useState({
-    title: "",
-    category: "",
-    location: "",
-    description: "",
-  });
+  title: "",
+  category: "",
+  location: "",
+  description: "",
+  priority: "Medium",
+});
 
   const handleChange = (e) => {
     setFormData({
@@ -36,7 +37,13 @@ function ComplaintForm() {
   ...formData,
   status: "Pending",
 });
-      setFormData({ title: "", category: "", location: "", description: "" });
+     setFormData({
+  title: "",
+  category: "",
+  location: "",
+  description: "",
+  priority: "Medium",
+});
       showSuccess("Complaint submitted successfully.");
     } finally {
       setIsLoading(false);
@@ -91,6 +98,19 @@ function ComplaintForm() {
               <option>Other</option>
             </select>
           </Field>
+          <Field label="Priority">
+  <select
+    name="priority"
+    value={formData.priority}
+    className={inputClass}
+    onChange={handleChange}
+    required
+  >
+    <option value="High">🔴 High</option>
+    <option value="Medium">🟡 Medium</option>
+    <option value="Low">🟢 Low</option>
+  </select>
+</Field>
 
           <Field label="Location">
             <input
