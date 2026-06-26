@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 import { FaUser, FaUserGraduate, FaUserShield } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
 import { RiLockPasswordLine } from "react-icons/ri";
 import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
 import { Button } from "../../components/ui";
-import { saveRegisteredUser } from "../../utils/auth";
 import { useToast } from "../../components/toastContext";
 
 function Register() {
@@ -23,41 +23,62 @@ function Register() {
 
   const navigate = useNavigate();
   const { showSuccess } = useToast();
+const handleChange = (event) => {
+  setFormData((prev) => ({
+    ...prev,
+    [event.target.name]: event.target.value,
+  }));
+};
+ const handleRegister = async (event) => {
+  event.preventDefault();
+  setError("");
 
-  const handleChange = (event) => {
-    setFormData((current) => ({ ...current, [event.target.name]: event.target.value }));
-  };
+  if (!formData.name.trim() || !formData.email.trim() || !formData.password) {
+    setError("Name, email, and password are required.");
+    return;
+  }
 
-  const handleRegister = async (event) => {
-    event.preventDefault();
-    setError("");
+  if (!/\S+@\S+\.\S+/.test(formData.email)) {
+    setError("Please enter a valid email address.");
+    return;
+  }
 
-    if (!formData.name.trim() || !formData.email.trim() || !formData.password) {
-      setError("Name, email, and password are required.");
-      return;
+  if (formData.password !== formData.confirmPassword) {
+    setError("Passwords do not match.");
+    return;
+  }
+
+  setIsLoading(true);
+
+  try {
+    const response = await axios.post(
+      "http://localhost:3001/api/users/register",
+      {
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
+        role: role === "student" ? "Student" : "Admin",
+      }
+    );
+
+    showSuccess(response.data.message);
+setFormData({
+  name: "",
+  email: "",
+  password: "",
+  confirmPassword: "",
+});
+    navigate("/");
+  } catch (error) {
+    if (error.response) {
+      setError(error.response.data.message);
+    } else {
+      setError("Server not responding.");
     }
-
-    if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      setError("Please enter a valid email address.");
-      return;
-    }
-
-    if (formData.password !== formData.confirmPassword) {
-      setError("Passwords do not match.");
-      return;
-    }
-
-    setIsLoading(true);
-    try {
-      await new Promise((resolve) => window.setTimeout(resolve, 300));
-      saveRegisteredUser({ name: formData.name, email: formData.email, role });
-      showSuccess("Account created successfully.");
-      navigate(role === "student" ? "/student/dashboard" : "/admin/dashboard");
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
+  } finally {
+    setIsLoading(false);
+  }
+};
   const inputWrap =
     "flex h-12 items-center gap-3 rounded-xl border border-slate-200 bg-white px-4 transition focus-within:border-[#2563EB] focus-within:ring-4 focus-within:ring-blue-100";
   const input =

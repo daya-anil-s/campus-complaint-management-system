@@ -1,9 +1,7 @@
 import { Card, PageHeader, PageShell } from "../components/ui";
-import { getCurrentUser, getRoleLabel } from "../utils/auth";
 
 function Profile() {
-  const user = getCurrentUser();
-  const roleLabel = getRoleLabel(user?.role);
+  const user = JSON.parse(localStorage.getItem("user"));
 
   return (
     <PageShell compact>
@@ -12,19 +10,34 @@ function Profile() {
         title="My Profile"
         description="Your current CCMS account information."
       />
+
       <Card className="p-6 sm:p-8">
         <dl className="space-y-5">
           <div>
-            <dt className="text-sm font-semibold text-slate-500">Name</dt>
-            <dd className="mt-1 text-base text-slate-950">{user?.name || roleLabel}</dd>
+            <dt className="text-sm font-semibold text-slate-500">
+              Name
+            </dt>
+            <dd className="mt-1 text-base text-slate-950">
+              {user?.name || "-"}
+            </dd>
           </div>
+
           <div>
-            <dt className="text-sm font-semibold text-slate-500">Email</dt>
-            <dd className="mt-1 break-words text-base text-slate-950">{user?.email}</dd>
+            <dt className="text-sm font-semibold text-slate-500">
+              Email
+            </dt>
+            <dd className="mt-1 break-words text-base text-slate-950">
+              {user?.email || "-"}
+            </dd>
           </div>
+
           <div>
-            <dt className="text-sm font-semibold text-slate-500">Role</dt>
-            <dd className="mt-1 text-base text-slate-950">{roleLabel}</dd>
+            <dt className="text-sm font-semibold text-slate-500">
+              Role
+            </dt>
+            <dd className="mt-1 text-base text-slate-950">
+              {user?.role || "-"}
+            </dd>
           </div>
         </dl>
       </Card>

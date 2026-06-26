@@ -7,25 +7,42 @@ import connectDB from "./config/db.js";
 import dashboardRoutes from "./routes/dashboardRoutes.js";
 import complaintRoutes from "./routes/complaintRoutes.js";
 
+import userRoutes from "./routes/userRoutes.js";
+8e95165 (Added authentication and backend integration)
+
 dotenv.config();
 
 // Force Node to use Google's DNS servers
 dns.setServers(["8.8.8.8", "8.8.4.4"]);
 
+
+// Connect Database
+ 8e95165 (Added authentication and backend integration)
 connectDB();
 
 const app = express();
 
+// Middleware
 app.use(cors());
 app.use(express.json());
+
 
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/complaints", complaintRoutes);
 
+
+// Routes
+app.use("/api/dashboard", dashboardRoutes);
+app.use("/api/complaints", complaintRoutes);
+app.use("/api/users", userRoutes); // ✅ Add this line
+
+// Default Route
+ 8e95165 (Added authentication and backend integration)
 app.get("/", (req, res) => {
   res.send("CCMS Backend Running");
 });
 
+// Server
 const PORT = process.env.PORT || 3001;
 
 app.listen(PORT, () => {

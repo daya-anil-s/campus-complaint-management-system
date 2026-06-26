@@ -5,7 +5,7 @@ import { MdEmail } from "react-icons/md";
 import { RiLockPasswordLine } from "react-icons/ri";
 import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
 import { Button } from "../../components/ui";
-import { findRegisteredUser, setCurrentUser } from "../../utils/auth";
+import axios from "axios";
 import { useToast } from "../../components/toastContext";
 
 function Login() {
@@ -21,38 +21,64 @@ function Login() {
   const { showSuccess } = useToast();
 
   const handleLogin = async (event) => {
-    event.preventDefault();
-    let valid = true;
+  event.preventDefault();
 
-    setEmailError("");
-    setPasswordError("");
+  let valid = true;
 
-    if (!email.trim()) {
-      setEmailError("Email is required");
-      valid = false;
-    } else if (!/\S+@\S+\.\S+/.test(email)) {
-      setEmailError("Please enter a valid email address");
-      valid = false;
-    }
+  setEmailError("");
+  setPasswordError("");
 
-    if (!password.trim()) {
-      setPasswordError("Password is required");
-      valid = false;
-    }
+  if (!email.trim()) {
+    setEmailError("Email is required");
+    valid = false;
+  }
 
-    if (valid) {
-      setIsLoading(true);
-      try {
-        await new Promise((resolve) => window.setTimeout(resolve, 300));
-        const registeredUser = findRegisteredUser(email, role);
-        setCurrentUser(registeredUser || { name: "", email, role });
-        showSuccess("Signed in successfully.");
-        navigate(role === "student" ? "/student/dashboard" : "/admin/dashboard");
-      } finally {
-        setIsLoading(false);
+  if (!password.trim()) {
+    setPasswordError("Password is required");
+    valid = false;
+  }
+
+  if (!valid) return;
+
+  setIsLoading(true);
+
+  try {
+    const response = await axios.post(
+      "http://localhost:3001/api/users/login",
+      {
+        email,
+        password,
       }
+    );
+
+    // Save JWT Token
+    localStorage.setItem("token", response.data.token);
+
+    // Save User Details
+    localStorage.setItem(
+      "user",
+      JSON.stringify(response.data.user)
+    );
+
+    showSuccess(response.data.message);
+
+    // Redirect based on role
+    if (response.data.user.role === "Student") {
+      navigate("/student/dashboard");
+    } else {
+      navigate("/admin/dashboard");
     }
-  };
+
+  } catch (error) {
+  if (error.response) {
+    setPasswordError(error.response.data.message);
+  } else {
+    setPasswordError("Server not responding");
+  }
+} finally {
+    setIsLoading(false);
+  }
+};
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-[#F8FAFC] px-4 py-10">

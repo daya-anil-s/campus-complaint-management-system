@@ -1,17 +1,28 @@
 import { Navigate, Outlet, useLocation } from "react-router-dom";
-import { getCurrentUser } from "../utils/auth";
 
 function ProtectedRoute({ allowedRole }) {
   const location = useLocation();
-  const user = getCurrentUser();
+
+  const user = JSON.parse(localStorage.getItem("user"));
 
   if (!user) {
     return <Navigate to="/" replace state={{ from: location }} />;
   }
 
-  if (allowedRole && user.role !== allowedRole) {
-    const dashboard = user.role === "admin" ? "/admin/dashboard" : "/student/dashboard";
-    return <Navigate to={dashboard} replace />;
+  if (
+    allowedRole &&
+    user.role.toLowerCase() !== allowedRole.toLowerCase()
+  ) {
+    return (
+      <Navigate
+        to={
+          user.role === "Admin"
+            ? "/admin/dashboard"
+            : "/student/dashboard"
+        }
+        replace
+      />
+    );
   }
 
   return <Outlet />;
