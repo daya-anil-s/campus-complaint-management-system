@@ -37,10 +37,11 @@ const complaintSchema = new mongoose.Schema(
       default: "",
     },
 
-    createdBy: {
-      type: String,
-      default: "Student",
-    },
+    student: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+},
   },
   {
     timestamps: true,

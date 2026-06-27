@@ -1,6 +1,6 @@
 
   import { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../../services/api";
 import { useNavigate, useParams } from "react-router-dom";
 
 import {
@@ -36,9 +36,7 @@ const [remarks, setRemarks] = useState("");
 
   const fetchComplaint = async () => {
     try {
-      const response = await axios.get(
-        `http://localhost:3001/api/complaints/${id}`
-      );
+    const response = await api.get(`/complaints/${id}`);
 
       setComplaint(response.data);
 setStatus(response.data.status);
@@ -55,12 +53,10 @@ setRemarks(response.data.remarks || "");
     setIsLoading(true);
 
     try {
-      await axios.put(
-        `http://localhost:3001/api/complaints/${id}`,
-        {
-  status,
-  priority,
-  remarks,
+      await api.put(`/complaints/${id}`, {
+        status,
+        priority,
+        remarks,
 }
       );
 

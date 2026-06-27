@@ -1,4 +1,7 @@
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import api from "../../services/api";
+
 import {
   Button,
   ButtonLink,
@@ -10,22 +13,61 @@ import {
 
 function ComplaintDetails() {
   const navigate = useNavigate();
+  const { id } = useParams();
 
-  const complaint = {
-    title: "WiFi Not Working",
-    category: "Internet/Wi-Fi",
-    location: "Library Block",
-    date: "17 June 2026",
-    status: "In Progress",
-    description:
-      "Internet connection is unavailable on the second floor of the library.",
-  };
+  const [complaint, setComplaint] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchComplaint = async () => {
+      try {
+        const res = await api.get(`/complaints/${id}`);
+        setComplaint(res.data);
+      } catch (error) {
+        console.error("Error fetching complaint:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchComplaint();
+  }, [id]);
+
+  if (loading) {
+    return (
+      <PageShell compact>
+        <p className="text-center text-slate-600">Loading...</p>
+      </PageShell>
+    );
+  }
+
+  if (!complaint) {
+    return (
+      <PageShell compact>
+        <p className="text-center text-red-600">
+          Complaint not found.
+        </p>
+
+        <div className="mt-6 flex justify-center">
+          <Button
+            variant="secondary"
+            onClick={() => navigate("/student/complaints")}
+          >
+            Back to Complaints
+          </Button>
+        </div>
+      </PageShell>
+    );
+  }
 
   const details = [
     ["Title", complaint.title],
     ["Category", complaint.category],
     ["Location", complaint.location],
-    ["Date Submitted", complaint.date],
+    [
+      "Date Submitted",
+      new Date(complaint.createdAt).toLocaleDateString(),
+    ],
     ["Description", complaint.description],
   ];
 
@@ -41,13 +83,19 @@ function ComplaintDetails() {
         <div className="space-y-5">
           {details.map(([label, value]) => (
             <div key={label}>
-              <h2 className="text-sm font-semibold text-slate-500">{label}</h2>
-              <p className="mt-1 text-base text-slate-950">{value}</p>
+              <h2 className="text-sm font-semibold text-slate-500">
+                {label}
+              </h2>
+              <p className="mt-1 text-base text-slate-950">
+                {value}
+              </p>
             </div>
           ))}
 
           <div>
-            <h2 className="mb-2 text-sm font-semibold text-slate-500">Status</h2>
+            <h2 className="mb-2 text-sm font-semibold text-slate-500">
+              Status
+            </h2>
             <StatusBadge status={complaint.status} />
           </div>
         </div>
@@ -60,7 +108,11 @@ function ComplaintDetails() {
           >
             Back to Complaints
           </Button>
-          <ButtonLink to="/student/dashboard" variant="secondary">
+
+          <ButtonLink
+            to="/student/dashboard"
+            variant="secondary"
+          >
             Dashboard
           </ButtonLink>
         </div>

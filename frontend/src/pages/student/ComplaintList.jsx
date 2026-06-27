@@ -19,8 +19,7 @@ function ComplaintList() {
 useEffect(() => {
   const fetchComplaints = async () => {
     try {
-      const res = await api.get("/complaints");
-      setComplaints(res.data);
+const res = await api.get("/complaints/my");      setComplaints(res.data);
     } catch (error) {
       console.error(error);
     }

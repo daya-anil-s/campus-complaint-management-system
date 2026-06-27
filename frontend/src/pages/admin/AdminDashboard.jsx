@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../../services/api";
 import { Link } from "react-router-dom";
 import { FaClipboardList } from "react-icons/fa";
 import {
@@ -62,16 +62,10 @@ const COLORS = [
 
   const fetchDashboardData = async () => {
     try {
-      const statsRes = await axios.get(
-        "http://localhost:3001/api/dashboard/stats"
-      );
-
+      const statsRes = await api.get("/dashboard/stats");
       setStats(statsRes.data);
 
-      const complaintsRes = await axios.get(
-        "http://localhost:3001/api/complaints"
-      );
-
+      const complaintsRes = await api.get("/complaints"); 
       setComplaints(complaintsRes.data.slice(0, 5));
     } catch (error) {
       console.error(error);

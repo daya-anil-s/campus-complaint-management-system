@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../../services/api";
 import { Link } from "react-router-dom";
 
 import {
@@ -26,9 +26,7 @@ function AdminComplaintList() {
 
   const fetchComplaints = async () => {
     try {
-      const response = await axios.get(
-        "http://localhost:3001/api/complaints"
-      );
+      const response = await api.get("/complaints");
 
       setComplaints(response.data);
     } catch (error) {
