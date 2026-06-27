@@ -2,6 +2,7 @@ import { Routes, Route } from "react-router-dom";
 
 import Login from "../pages/auth/Login";
 import Register from "../pages/auth/Register";
+import ForgotPassword from "../pages/auth/ForgotPassword";
 
 import StudentDashboard from "../pages/student/StudentDashboard";
 import ComplaintForm from "../pages/student/ComplaintForm";
@@ -22,6 +23,7 @@ function AppRoutes() {
       {/* Authentication */}
       <Route path="/" element={<Login />} />
       <Route path="/register" element={<Register />} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
 
       {/* Student Routes */}
       <Route element={<ProtectedRoute allowedRole="student" />}>

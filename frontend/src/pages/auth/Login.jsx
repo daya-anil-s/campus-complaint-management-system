@@ -187,9 +187,12 @@ function Login() {
               />
               Remember me
             </label>
-            <a href="#" className="font-semibold text-[#2563EB] no-underline hover:underline">
-              Forgot password?
-            </a>
+           <Link
+  to="/forgot-password"
+  className="font-semibold text-[#2563EB] no-underline hover:underline"
+>
+  Forgot password?
+</Link>
           </div>
 
           <Button type="submit" className="w-full" disabled={isLoading}>
