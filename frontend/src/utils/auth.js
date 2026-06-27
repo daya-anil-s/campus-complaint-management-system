@@ -1,70 +1,47 @@
-export const AUTH_USER_KEY = "ccmsUser";
-export const REGISTERED_USERS_KEY = "ccmsUsers";
+// src/utils/auth.js
 
-function readJson(key, fallback) {
+export function getCurrentUser() {
+  const user = localStorage.getItem("user");
+
+  if (!user) {
+    return null;
+  }
+
   try {
-    const value = JSON.parse(localStorage.getItem(key));
-    return value ?? fallback;
-  } catch {
-    return fallback;
+    return JSON.parse(user);
+  } catch (error) {
+    return null;
   }
 }
 
-export function getCurrentUser() {
-  const user = readJson(AUTH_USER_KEY, null);
-
-  if (!user?.email || !user?.role) return null;
-
-  return {
-    name: user.name || "",
-    email: user.email,
-    role: user.role,
-  };
-}
-
 export function setCurrentUser(user) {
-  const frontendUser = {
-    name: user.name?.trim() || "",
-    email: user.email.trim().toLowerCase(),
-    role: user.role,
-  };
-
-  localStorage.setItem(AUTH_USER_KEY, JSON.stringify(frontendUser));
-  return frontendUser;
+  localStorage.setItem("user", JSON.stringify(user));
 }
 
-export function getRegisteredUsers() {
-  const users = readJson(REGISTERED_USERS_KEY, []);
-  return Array.isArray(users) ? users : [];
+export function getToken() {
+  return localStorage.getItem("token");
 }
 
-export function saveRegisteredUser(user) {
-  const frontendUser = setCurrentUser(user);
-  const users = getRegisteredUsers();
-  const existingIndex = users.findIndex(
-    (item) =>
-      item.email?.toLowerCase() === frontendUser.email &&
-      item.role === frontendUser.role,
-  );
-
-  if (existingIndex >= 0) users[existingIndex] = frontendUser;
-  else users.push(frontendUser);
-
-  localStorage.setItem(REGISTERED_USERS_KEY, JSON.stringify(users));
-  return frontendUser;
-}
-
-export function findRegisteredUser(email, role) {
-  const normalizedEmail = email.trim().toLowerCase();
-  return getRegisteredUsers().find(
-    (user) => user.email?.toLowerCase() === normalizedEmail && user.role === role,
-  );
+export function setToken(token) {
+  localStorage.setItem("token", token);
 }
 
 export function clearCurrentUser() {
-  localStorage.removeItem(AUTH_USER_KEY);
+  localStorage.removeItem("user");
+  localStorage.removeItem("token");
+}
+
+export function isLoggedIn() {
+  return !!localStorage.getItem("token");
+}
+
+export function logout() {
+  localStorage.removeItem("user");
+  localStorage.removeItem("token");
 }
 
 export function getRoleLabel(role) {
-  return role ? role.charAt(0).toUpperCase() + role.slice(1) : "";
+  if (!role) return "";
+
+  return role.charAt(0).toUpperCase() + role.slice(1).toLowerCase();
 }

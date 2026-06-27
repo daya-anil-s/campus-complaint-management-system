@@ -68,7 +68,11 @@ setFormData({
   password: "",
   confirmPassword: "",
 });
-    navigate("/");
+   showSuccess(response.data.message);
+
+alert("Registration successful");
+
+navigate("/");
   } catch (error) {
     if (error.response) {
       setError(error.response.data.message);
