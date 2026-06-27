@@ -10,10 +10,11 @@ function Navbar() {
   const navigate = useNavigate();
   const { showSuccess } = useToast();
   const user = getCurrentUser();
+  console.log(user);
   const displayName = user?.name || getRoleLabel(user?.role);
 
   const links =
-    user?.role === "admin"
+    user?.role === "Admin"
       ? [
           { label: "Dashboard", to: "/admin/dashboard" },
           { label: "Complaints", to: "/admin/complaints" },
@@ -44,7 +45,7 @@ function Navbar() {
     <header className="border-b border-slate-200 bg-white shadow-sm">
       <div className="mx-auto flex max-w-7xl flex-wrap items-center gap-x-6 gap-y-3 px-4 py-3 sm:px-6 lg:px-8">
         <NavLink
-          to={user?.role === "admin" ? "/admin/dashboard" : "/student/dashboard"}
+          to={user?.role === "Admin" ? "/admin/dashboard" : "/student/dashboard"}
           className="mr-auto text-lg font-bold tracking-tight text-slate-950 no-underline"
         >
           CCMS
