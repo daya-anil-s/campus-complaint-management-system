@@ -127,6 +127,9 @@ export const updateComplaint = async (req, res) => {
         status: req.body.status,
         priority: req.body.priority,
         remarks: req.body.remarks,
+        department: req.body.department,
+        estimatedCompletionDate: req.body.estimatedCompletionDate,
+        notifyStudent: req.body.notifyStudent,
       },
       {
         new: true,

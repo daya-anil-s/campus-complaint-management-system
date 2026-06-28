@@ -47,7 +47,17 @@ images: [
     type: String,
   },
 ],
-
+department: {
+  type: String,
+  default: "",
+},
+estimatedCompletionDate: {
+  type: Date,
+},
+notifyStudent: {
+  type: Boolean,
+  default: false,
+},
   },
   {
     timestamps: true,

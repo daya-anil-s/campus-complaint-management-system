@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-import api from "../../services/api";import {
+import api from "../../services/api";
+import {
   ButtonLink,
   DataTable,
   EmptyState,
@@ -13,20 +14,26 @@ import api from "../../services/api";import {
   Td,
   Th,
 } from "../../components/ui";
+import { SkeletonTable } from "../../components/SkeletonLoader";
 
 function ComplaintList() {
   const [complaints, setComplaints] = useState([]);
-useEffect(() => {
-  const fetchComplaints = async () => {
-    try {
-const res = await api.get("/complaints/my");      setComplaints(res.data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  const [isLoading, setIsLoading] = useState(true);
 
-  fetchComplaints();
-}, []);
+  useEffect(() => {
+    const fetchComplaints = async () => {
+      try {
+        const res = await api.get("/complaints/my");
+        setComplaints(res.data);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchComplaints();
+  }, []);
 
 const handleDelete = async (id) => {
   const confirmDelete = window.confirm(
@@ -60,7 +67,11 @@ const handleDelete = async (id) => {
       />
 
       <TableCard>
-        {complaints.length === 0 ? (
+        {isLoading ? (
+          <div className="p-4 animate-pulse">
+            <SkeletonTable rows={5} cols={5} />
+          </div>
+        ) : complaints.length === 0 ? (
           <EmptyState description="Submit your first complaint to get started." />
         ) : (
         <DataTable>

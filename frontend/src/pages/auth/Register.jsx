@@ -72,7 +72,7 @@ setFormData({
 
 alert("Registration successful");
 
-navigate("/");
+navigate("/login");
   } catch (error) {
     if (error.response) {
       setError(error.response.data.message);
@@ -244,7 +244,7 @@ navigate("/");
 
         <p className="text-center text-sm text-slate-600">
           <Link
-            to="/"
+            to="/login"
             className="font-semibold text-[#2563EB] no-underline hover:underline"
           >
             Sign In

@@ -10,6 +10,7 @@ import {
   PageShell,
   StatusBadge,
 } from "../../components/ui";
+import { SkeletonComplaint } from "../../components/SkeletonLoader";
 
 function ComplaintDetails() {
   const navigate = useNavigate();
@@ -73,7 +74,7 @@ function ComplaintDetails() {
   if (loading) {
     return (
       <PageShell compact>
-        <p className="text-center text-slate-600">Loading...</p>
+        <SkeletonComplaint />
       </PageShell>
     );
   }

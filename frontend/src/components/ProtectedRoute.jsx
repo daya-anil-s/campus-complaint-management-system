@@ -6,7 +6,7 @@ function ProtectedRoute({ allowedRole }) {
   const user = JSON.parse(localStorage.getItem("user"));
 
   if (!user) {
-    return <Navigate to="/" replace state={{ from: location }} />;
+    return <Navigate to="/login" replace state={{ from: location }} />;
   }
 
   if (
