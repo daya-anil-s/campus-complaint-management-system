@@ -27,6 +27,25 @@ const res = await api.get("/complaints/my");      setComplaints(res.data);
 
   fetchComplaints();
 }, []);
+
+const handleDelete = async (id) => {
+  const confirmDelete = window.confirm(
+    "Are you sure you want to delete this complaint?"
+  );
+
+  if (!confirmDelete) return;
+
+  try {
+    await api.delete(`/complaints/${id}`);
+
+    setComplaints((prev) =>
+      prev.filter((complaint) => complaint._id !== id)
+    );
+  } catch (error) {
+    console.error(error);
+  }
+};
+
   return (
     <PageShell>
       <PageHeader
@@ -65,14 +84,31 @@ const res = await api.get("/complaints/my");      setComplaints(res.data);
                 <Td>
   {new Date(complaint.createdAt).toLocaleDateString()}
 </Td>
-                <Td>
-                  <Link
-                   to={`/student/complaint/${complaint._id}`}
-                    className="font-semibold text-[#2563EB] no-underline hover:underline"
-                  >
-                    View Details
-                  </Link>
-                </Td>
+               <Td>
+  <div className="flex items-center gap-4">
+    <Link
+      to={`/student/complaint/${complaint._id}`}
+      className="font-semibold text-blue-600 hover:underline"
+    >
+      View
+    </Link>
+
+    <Link
+      to={`/student/edit-complaint/${complaint._id}`}
+      className="font-semibold text-green-600 hover:underline"
+    >
+      Edit
+    </Link>
+
+    <button
+      type="button"
+      onClick={() => handleDelete(complaint._id)}
+      className="font-semibold text-red-600 hover:underline"
+    >
+      Delete
+    </button>
+  </div>
+</Td>
               </TableRow>
             ))}
           </tbody>

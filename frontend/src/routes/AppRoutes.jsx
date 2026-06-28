@@ -8,7 +8,7 @@ import StudentDashboard from "../pages/student/StudentDashboard";
 import ComplaintForm from "../pages/student/ComplaintForm";
 import ComplaintList from "../pages/student/ComplaintList";
 import ComplaintDetails from "../pages/student/ComplaintDetails";
-
+import EditComplaint from "../pages/student/EditComplaint";
 import AdminDashboard from "../pages/admin/AdminDashboard";
 import AdminComplaintList from "../pages/admin/AdminComplaintList";
 import UpdateComplaint from "../pages/admin/UpdateComplaint";
@@ -31,6 +31,7 @@ function AppRoutes() {
         <Route path="/student/complaint" element={<ComplaintForm />} />
         <Route path="/student/complaints" element={<ComplaintList />} />
         <Route path="/student/complaint/:id" element={<ComplaintDetails />} />
+        <Route path="/student/edit-complaint/:id" element={<EditComplaint />} />
       </Route>
 
       {/* Admin Routes */}
