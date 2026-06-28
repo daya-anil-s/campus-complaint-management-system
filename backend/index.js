@@ -7,6 +7,7 @@ import connectDB from "./config/db.js";
 import dashboardRoutes from "./routes/dashboardRoutes.js";
 import complaintRoutes from "./routes/complaintRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
+import commentRoutes from "./routes/commentRoutes.js";
 
 dotenv.config();
 
@@ -26,6 +27,7 @@ app.use(express.json());
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/complaints", complaintRoutes);
 app.use("/api/users", userRoutes); // ✅ Add this line
+app.use("/api/comments", commentRoutes); // ✅ Add this line
 
 // Default Route
 app.get("/", (req, res) => {

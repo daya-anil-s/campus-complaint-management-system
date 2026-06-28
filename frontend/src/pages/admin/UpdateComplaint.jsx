@@ -29,10 +29,22 @@ function UpdateComplaint() {
 const [priority, setPriority] = useState("Medium");
 const [remarks, setRemarks] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+const [comments, setComments] = useState([]);
+const [message, setMessage] = useState("");
+const [sending, setSending] = useState(false);
 
   useEffect(() => {
     fetchComplaint();
   }, []);
+
+  const fetchComments = async () => {
+  try {
+    const res = await api.get(`/comments/${id}`);
+    setComments(res.data);
+  } catch (error) {
+    console.error(error);
+  }
+};
 
   const fetchComplaint = async () => {
     try {
@@ -42,10 +54,32 @@ const [remarks, setRemarks] = useState("");
 setStatus(response.data.status);
 setPriority(response.data.priority || "Medium");
 setRemarks(response.data.remarks || "");
+await fetchComments();
     } catch (error) {
       console.error(error);
     }
   };
+
+  const handleCommentSubmit = async () => {
+  if (!message.trim()) return;
+
+  try {
+    setSending(true);
+
+    await api.post("/comments", {
+      complaintId: id,
+      message,
+    });
+
+    setMessage("");
+
+    await fetchComments();
+  } catch (error) {
+    console.error(error);
+  } finally {
+    setSending(false);
+  }
+};
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -137,6 +171,56 @@ window.location.href = "/admin/complaints";
             </p>
           </div>
         </div>
+
+        <hr className="my-8" />
+
+<h2 className="mb-4 text-xl font-semibold">
+  Discussion
+</h2>
+
+<div className="space-y-4">
+  {comments.length === 0 ? (
+    <p>No comments yet.</p>
+  ) : (
+    comments.map((comment) => (
+      <div
+        key={comment._id}
+        className="rounded-lg border p-4"
+      >
+        <p className="font-semibold">
+          {comment.user.name} ({comment.user.role})
+        </p>
+
+        <p className="mt-2">
+          {comment.message}
+        </p>
+
+        <p className="mt-2 text-xs text-gray-500">
+          {new Date(comment.createdAt).toLocaleString()}
+        </p>
+      </div>
+    ))
+  )}
+</div>
+
+<div className="mt-6">
+  <textarea
+    rows="4"
+    className={textareaClass}
+    placeholder="Reply to student..."
+    value={message}
+    onChange={(e) => setMessage(e.target.value)}
+  />
+
+  <Button
+    className="mt-3"
+    type="button"
+    disabled={sending}
+    onClick={handleCommentSubmit}
+  >
+    {sending ? "Sending..." : "Send Reply"}
+  </Button>
+</div>
 
         <form
           onSubmit={handleSubmit}
