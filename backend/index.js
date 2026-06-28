@@ -2,7 +2,7 @@ import dns from "node:dns";
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-
+import path from "path";
 import connectDB from "./config/db.js";
 import dashboardRoutes from "./routes/dashboardRoutes.js";
 import complaintRoutes from "./routes/complaintRoutes.js";
@@ -28,7 +28,7 @@ app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/complaints", complaintRoutes);
 app.use("/api/users", userRoutes); // ✅ Add this line
 app.use("/api/comments", commentRoutes); // ✅ Add this line
-
+app.use("/uploads", express.static(path.join("uploads")));
 // Default Route
 app.get("/", (req, res) => {
   res.send("CCMS Backend Running");

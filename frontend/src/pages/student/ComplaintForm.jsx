@@ -13,6 +13,7 @@ import api from "../../services/api";
 
 function ComplaintForm() {
   const [isLoading, setIsLoading] = useState(false);
+  const [images, setImages] = useState([]);
   const { showSuccess } = useToast();
   const [formData, setFormData] = useState({
   title: "",
@@ -29,13 +30,31 @@ function ComplaintForm() {
     });
   };
 
+  const handleImageChange = (e) => {
+  setImages([...e.target.files]);
+};
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     try {
-      await api.post("/complaints", {
-  ...formData,
-  status: "Pending",
+      const data = new FormData();
+
+data.append("title", formData.title);
+data.append("category", formData.category);
+data.append("location", formData.location);
+data.append("description", formData.description);
+data.append("priority", formData.priority);
+data.append("status", "Pending");
+
+images.forEach((image) => {
+  data.append("images", image);
+});
+
+await api.post("/complaints", data, {
+  headers: {
+    "Content-Type": "multipart/form-data",
+  },
 });
      setFormData({
   title: "",
@@ -44,6 +63,9 @@ function ComplaintForm() {
   description: "",
   priority: "Medium",
 });
+
+setImages([]);
+
       showSuccess("Complaint submitted successfully.");
     } finally {
       setIsLoading(false);
@@ -135,6 +157,17 @@ function ComplaintForm() {
               required
             />
           </Field>
+
+          <Field label="Upload Images">
+  <input
+    type="file"
+    multiple
+    accept="image/*"
+    className={inputClass}
+    onChange={handleImageChange}
+  />
+</Field>
+
 
           <Button type="submit" className="w-full" disabled={isLoading}>
             {isLoading ? "Submitting..." : "Submit Complaint"}

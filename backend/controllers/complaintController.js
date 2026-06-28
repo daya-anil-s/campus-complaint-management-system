@@ -3,10 +3,15 @@ import Complaint from "../models/Complaint.js";
 // CREATE COMPLAINT
 export const createComplaint = async (req, res) => {
   try {
-    const complaint = await Complaint.create({
-      ...req.body,
-      student: req.user.id,
-    });
+   const images = req.files
+  ? req.files.map((file) => file.filename)
+  : [];
+
+const complaint = await Complaint.create({
+  ...req.body,
+  student: req.user.id,
+  images,
+});
 
     res.status(201).json(complaint);
   } catch (error) {

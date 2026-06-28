@@ -136,6 +136,25 @@ function ComplaintDetails() {
             <StatusBadge status={complaint.status} />
           </div>
 
+          {complaint.images && complaint.images.length > 0 && (
+  <div>
+    <h2 className="mb-2 text-sm font-semibold text-slate-500">
+      Images
+    </h2>
+
+    <div className="grid grid-cols-2 gap-4">
+      {complaint.images.map((image, index) => (
+        <img
+          key={index}
+          src={`http://localhost:3001/uploads/${image}`}
+          alt="Complaint"
+          className="h-40 w-full rounded-lg border object-cover"
+        />
+      ))}
+    </div>
+  </div>
+)}
+
           {/* Discussion */}
           <hr className="my-8" />
 

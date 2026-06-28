@@ -169,6 +169,26 @@ window.location.href = "/admin/complaints";
             <p className="mt-1 text-base">
               {complaint.location}
             </p>
+
+            {complaint.images && complaint.images.length > 0 && (
+  <div className="sm:col-span-2">
+    <h2 className="text-sm font-semibold text-slate-500">
+      Images
+    </h2>
+
+    <div className="mt-3 grid grid-cols-2 gap-4">
+      {complaint.images.map((image, index) => (
+        <img
+          key={index}
+          src={`http://localhost:3001/uploads/${image}`}
+          alt="Complaint"
+          className="h-40 w-full rounded-lg border object-cover"
+        />
+      ))}
+    </div>
+  </div>
+)}
+
           </div>
         </div>
 

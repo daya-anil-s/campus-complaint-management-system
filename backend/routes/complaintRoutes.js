@@ -1,5 +1,6 @@
 import express from "express";
 import authMiddleware from "../middleware/authMiddleware.js";
+import upload from "../middleware/uploadMiddleware.js";
 
 import {
   createComplaint,
@@ -13,7 +14,7 @@ import {
 const router = express.Router();
 
 // Create Complaint
-router.post("/", authMiddleware, createComplaint);
+router.post("/", authMiddleware, upload.array("images", 5), createComplaint);
 
 // Get ALL complaints (Dashboard)
 router.get("/", authMiddleware, getComplaints);
