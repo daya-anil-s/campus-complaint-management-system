@@ -18,7 +18,7 @@ function ToastProvider({ children }) {
       {children}
       {message && (
         <div
-          className="fixed right-4 top-4 z-[100] max-w-sm rounded-xl border border-blue-100 bg-blue-50 px-4 py-3 text-sm font-medium text-[#2563EB] shadow-lg"
+          className="fixed right-4 top-4 z-[100] max-w-sm rounded-[var(--radius-cards)] border border-charcoal bg-graphite px-4 py-3 text-sm font-medium text-pilot-gold shadow-xl animate-fadeIn font-circularxx"
           role="status"
           aria-live="polite"
         >

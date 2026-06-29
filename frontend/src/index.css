@@ -1,10 +1,104 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800&family=Martian+Mono:wght@400;500;600;700&display=swap");
 @import "tailwindcss";
 
+@theme {
+  /* Colors */
+  --color-obsidian: #0c0a09;
+  --color-graphite: #1c1917;
+  --color-charcoal: #292524;
+  --color-slate: #44403c;
+  --color-stone: #57534e;
+  --color-ash: #78716c;
+  --color-pebble: #a8a29e;
+  --color-mist: #d6d3d1;
+  --color-fog: #e5e7eb;
+  --color-bone: #f6f6f6;
+  --color-pure: #ffffff;
+  --color-pilot-gold: #cab16a;
+  --color-circuit-green: #89b482;
+  --color-signal-red: #ea6962;
+
+  /* Typography — Font Families */
+  --font-circularxx: 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-whyte: 'Outfit', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-whyte-inktrap: 'Outfit', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-circularxxmono: 'Martian Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  /* Typography — Scale */
+  --text-caption: 12px;
+  --leading-caption: 1.5;
+  --tracking-caption: -0.019px;
+  --text-body-sm: 14px;
+  --leading-body-sm: 1.56;
+  --tracking-body-sm: -0.019px;
+  --text-body: 16px;
+  --leading-body: 1.5;
+  --tracking-body: -0.019px;
+  --text-subheading: 20px;
+  --leading-subheading: 1.4;
+  --tracking-subheading: -0.025px;
+  --text-heading-sm: 24px;
+  --leading-heading-sm: 1.33;
+  --tracking-heading-sm: -0.025px;
+  --text-heading: 36px;
+  --leading-heading: 1.2;
+  --tracking-heading: -0.056px;
+  --text-heading-lg: 48px;
+  --leading-heading-lg: 1.11;
+  --tracking-heading-lg: -0.056px;
+  --text-display: 72px;
+  --leading-display: 1;
+  --tracking-display: -0.056px;
+
+  /* Typography — Weights */
+  --font-weight-light: 300;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* Spacing */
+  --spacing-8: 8px;
+  --spacing-16: 16px;
+  --spacing-24: 24px;
+  --spacing-32: 32px;
+  --spacing-40: 40px;
+  --spacing-48: 48px;
+  --spacing-64: 64px;
+  --spacing-80: 80px;
+  --spacing-96: 96px;
+  --spacing-128: 128px;
+  --spacing-144: 144px;
+  --spacing-160: 160px;
+  --spacing-192: 192px;
+
+  /* Border Radius */
+  --radius-md: 4px;
+  --radius-xl: 12px;
+  --radius-full: 9999px;
+
+  /* named radii overrides */
+  --radius-tags: 9999px;
+  --radius-cards: 12px;
+  --radius-inputs: 4px;
+  --radius-buttons: 9999px;
+
+  /* Shadows */
+  --shadow-subtle: rgba(0, 0, 0, 0.05) 0px 1px 2px 0px;
+  --shadow-subtle-2: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.1) 0px 1px 2px -1px;
+  --shadow-xl: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px, rgba(0, 0, 0, 0.1) 0px 8px 10px -6px;
+
+  /* Surfaces */
+  --surface-canvas: #0c0a09;
+  --surface-card: #1c1917;
+  --surface-elevated: #292524;
+  --surface-overlay: #44403c;
+}
+
 :root {
-  color: #0f172a;
-  background: #f8fafc;
-  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: var(--color-fog);
+  background: var(--color-obsidian);
+  font-family: var(--font-circularxx);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -19,7 +113,7 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
-  background: #f8fafc;
+  background: var(--color-obsidian);
 }
 
 button,
@@ -44,11 +138,11 @@ a {
 }
 
 .animate-fadeIn {
-  animation: fadeIn 0.2s ease-out forwards;
+  animation: fadeIn 0.25s ease-out forwards;
 }
 
 .scale-in {
-  animation: scaleIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: scaleIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 @keyframes float {
@@ -59,3 +153,26 @@ a {
 .animate-float {
   animation: float 4s ease-in-out infinite;
 }
+
+/* Gradient Mesh background effect using warm accents */
+.gradient-mesh {
+  background: radial-gradient(circle at 20% 30%, rgba(202, 177, 106, 0.05), transparent 50%),
+              radial-gradient(circle at 80% 70%, rgba(137, 180, 130, 0.05), transparent 50%);
+}
+
+/* Custom scrollbars for a premium dark layout */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-obsidian);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-charcoal);
+  border-radius: var(--radius-full);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-slate);
+}
+

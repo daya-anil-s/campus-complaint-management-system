@@ -21,7 +21,6 @@ import {
   Pie,
   Cell,
   Tooltip,
-  Legend,
   ResponsiveContainer,
 } from "recharts";
 
@@ -55,10 +54,11 @@ function AdminDashboard() {
     },
   ].filter(item => item.value > 0);
 
+  // Wonder Theme Colors: Stone (Pending), Pilot Gold (In Progress), Mist (Resolved)
   const COLORS = [
-    "#F59E0B",
-    "#3B82F6",
-    "#10B981",
+    "#57534e",
+    "#cab16a",
+    "#d6d3d1",
   ];
 
   useEffect(() => {
@@ -87,7 +87,7 @@ function AdminDashboard() {
         title="Complaint Operations"
         description="Manage, track, and resolve campus complaints from a clean operational dashboard."
         actions={
-          <ButtonLink to="/admin/complaints" className="hover:scale-102 transition shadow-sm">
+          <ButtonLink to="/admin/complaints" className="transition shadow-sm">
             View All Complaints
           </ButtonLink>
         }
@@ -115,7 +115,7 @@ function AdminDashboard() {
         <div className="space-y-6">
           
           {/* STATS OVERVIEW */}
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 font-circularxx">
             <div className="hover:scale-102 transition duration-200">
               <StatCard
                 icon={FaClipboardList}
@@ -148,24 +148,24 @@ function AdminDashboard() {
 
           <div className="grid gap-6 lg:grid-cols-3">
             {/* Quick Summary Info */}
-            <div className="lg:col-span-1 flex flex-col gap-4">
-              <Card className="p-6 h-full flex flex-col justify-between hover:shadow-md transition">
+            <div className="lg:col-span-1 flex flex-col gap-4 font-circularxx">
+              <Card className="p-6 h-full flex flex-col justify-between hover:shadow-subtle transition">
                 <div>
-                  <h3 className="text-base font-bold text-slate-800 mb-2">Operations Summary</h3>
-                  <p className="text-xs text-slate-500 leading-relaxed">
+                  <h3 className="text-sm font-semibold tracking-[0.08em] text-fog uppercase font-circularxx mb-2">Operations Summary</h3>
+                  <p className="text-xs text-pebble leading-relaxed">
                     Check assigned departments, update resolutions and estimated completion times. Keep student notifications active for higher customer satisfaction.
                   </p>
                 </div>
-                <div className="pt-4 border-t border-slate-100 space-y-2.5">
+                <div className="pt-4 border-t border-charcoal/40 space-y-2.5">
                   <div className="flex justify-between items-center text-xs">
-                    <span className="font-semibold text-slate-500">Pending Rate</span>
-                    <span className="font-bold text-amber-600">
+                    <span className="font-semibold text-mist">Pending Rate</span>
+                    <span className="font-bold text-pilot-gold font-circularxxmono">
                       {stats.total > 0 ? Math.round((stats.pending / stats.total) * 100) : 0}%
                     </span>
                   </div>
                   <div className="flex justify-between items-center text-xs">
-                    <span className="font-semibold text-slate-500">Resolution Rate</span>
-                    <span className="font-bold text-emerald-600">
+                    <span className="font-semibold text-mist">Resolution Rate</span>
+                    <span className="font-bold text-mist font-circularxxmono">
                       {stats.total > 0 ? Math.round((stats.resolved / stats.total) * 100) : 0}%
                     </span>
                   </div>
@@ -175,17 +175,17 @@ function AdminDashboard() {
 
             {/* Pie Chart */}
             <div className="lg:col-span-2">
-              <Card className="h-full p-6 hover:shadow-md transition">
-                <h2 className="mb-4 text-base font-bold text-slate-800">
+              <Card className="h-full p-6 hover:shadow-subtle transition">
+                <h2 className="mb-4 text-sm font-semibold tracking-[0.08em] text-fog uppercase font-circularxx">
                   Complaint Status Overview
                 </h2>
 
                 {chartData.length === 0 ? (
-                  <div className="h-48 flex items-center justify-center">
-                    <p className="text-sm text-slate-400 italic">No complaint statistics available.</p>
+                  <div className="h-48 flex items-center justify-center font-circularxx">
+                    <p className="text-sm text-pebble italic font-medium">No complaint statistics available.</p>
                   </div>
                 ) : (
-                  <div style={{ width: "100%", height: 200 }}>
+                  <div style={{ width: "100%", height: 200 }} className="relative flex justify-center items-center">
                     <ResponsiveContainer width="100%" height="100%">
                       <PieChart>
                         <Pie
@@ -194,6 +194,7 @@ function AdminDashboard() {
                           nameKey="name"
                           outerRadius={80}
                           label={({ name, percent }) => `${name} (${(percent * 100).toFixed(0)}%)`}
+                          className="font-circularxxmono text-[10px] fill-fog"
                         >
                           {chartData.map((entry, index) => {
                             let cellColor = COLORS[0];
@@ -214,8 +215,8 @@ function AdminDashboard() {
           {/* RECENT COMPLAINTS TABLE */}
           <TableCard title="Recent Complaints">
             {complaints.length === 0 ? (
-              <div className="p-8 text-center border-t border-slate-100">
-                <p className="text-sm text-slate-400 italic">No complaints submitted yet.</p>
+              <div className="p-8 text-center border-t border-charcoal/40 bg-graphite">
+                <p className="text-sm text-pebble italic font-medium font-circularxx">No complaints submitted yet.</p>
               </div>
             ) : (
               <DataTable>
@@ -230,7 +231,7 @@ function AdminDashboard() {
                 <tbody>
                   {complaints.map((complaint) => (
                     <TableRow key={complaint._id}>
-                      <Td className="font-semibold text-slate-900">
+                      <Td className="font-semibold text-fog">
                         {complaint.title}
                       </Td>
 
@@ -241,7 +242,7 @@ function AdminDashboard() {
                       <Td>
                         <button
                           onClick={() => setSelectedComplaintId(complaint._id)}
-                          className="font-semibold text-[#2563EB] hover:text-blue-700 hover:underline transition cursor-pointer"
+                          className="font-semibold text-pilot-gold hover:underline transition cursor-pointer bg-transparent border-0 p-0 font-circularxxmono text-xs tracking-wide"
                         >
                           Update
                         </button>

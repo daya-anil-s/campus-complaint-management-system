@@ -82,7 +82,7 @@ function ComplaintDetails() {
   if (!complaint) {
     return (
       <PageShell compact>
-        <p className="text-center text-red-600">
+        <p className="text-center text-signal-red font-semibold">
           Complaint not found.
         </p>
 
@@ -118,85 +118,90 @@ function ComplaintDetails() {
       />
 
       <Card className="p-6 sm:p-8">
-        <div className="space-y-5">
+        <div className="space-y-6">
           {details.map(([label, value]) => (
             <div key={label}>
-              <h2 className="text-sm font-semibold text-slate-500">
+              <h2 className="text-[10px] font-bold font-circularxxmono uppercase tracking-[0.08em] text-pebble">
                 {label}
               </h2>
-              <p className="mt-1 text-base text-slate-950">
+              <p className="mt-1.5 text-base text-fog font-medium leading-relaxed font-circularxx">
                 {value}
               </p>
             </div>
           ))}
 
           <div>
-            <h2 className="mb-2 text-sm font-semibold text-slate-500">
+            <h2 className="mb-2 text-[10px] font-bold font-circularxxmono uppercase tracking-[0.08em] text-pebble">
               Status
             </h2>
             <StatusBadge status={complaint.status} />
           </div>
 
           {complaint.images && complaint.images.length > 0 && (
-  <div>
-    <h2 className="mb-2 text-sm font-semibold text-slate-500">
-      Images
-    </h2>
+            <div>
+              <h2 className="mb-2.5 text-[10px] font-bold font-circularxxmono uppercase tracking-[0.08em] text-pebble">
+                Attached Images
+              </h2>
 
-    <div className="grid grid-cols-2 gap-4">
-      {complaint.images.map((image, index) => (
-        <img
-          key={index}
-          src={`http://localhost:3001/uploads/${image}`}
-          alt="Complaint"
-          className="h-40 w-full rounded-lg border object-cover"
-        />
-      ))}
-    </div>
-  </div>
-)}
+              <div className="grid grid-cols-2 gap-4">
+                {complaint.images.map((image, index) => (
+                  <img
+                    key={index}
+                    src={`http://localhost:3001/uploads/${image}`}
+                    alt="Complaint"
+                    className="h-40 w-full rounded-[var(--radius-images)] border border-charcoal object-cover hover:border-slate transition duration-200"
+                  />
+                ))}
+              </div>
+            </div>
+          )}
 
           {/* Discussion */}
-          <hr className="my-8" />
+          <hr className="my-8 border-charcoal/40" />
 
-          <h2 className="text-xl font-semibold">
+          <h2 className="text-lg font-medium text-fog font-circularxx">
             Discussion
           </h2>
 
-          <div className="space-y-4">
+          <div className="space-y-4 max-h-[400px] overflow-y-auto pr-1">
             {comments.length === 0 ? (
-              <p className="text-gray-500">
+              <p className="text-sm text-pebble italic font-circularxx">
                 No comments yet.
               </p>
             ) : (
-              comments.map((comment) => (
-                <div
-                  key={comment._id}
-                  className="rounded-lg border p-4"
-                >
-                  <p className="font-semibold">
-                    {comment.user.name} ({comment.user.role})
-                  </p>
+              comments.map((comment) => {
+                const isAdmin = comment.user.role === "Admin";
+                return (
+                  <div
+                    key={comment._id}
+                    className={`p-4 rounded-[var(--radius-cards)] border ${
+                      isAdmin 
+                        ? "bg-pilot-gold/10 border-pilot-gold/20 mr-8 text-fog" 
+                        : "bg-charcoal/40 border-charcoal/40 ml-8 text-mist"
+                    }`}
+                  >
+                    <p className={`text-xs font-semibold ${isAdmin ? "text-pilot-gold" : "text-mist"} font-circularxxmono`}>
+                      {comment.user.name} ({comment.user.role})
+                    </p>
 
-                  <p className="mt-2">
-                    {comment.message}
-                  </p>
+                    <p className="mt-2 text-sm text-mist leading-relaxed font-circularxx">
+                      {comment.message}
+                    </p>
 
-                  <p className="mt-2 text-xs text-gray-500">
-                    {new Date(
-                      comment.createdAt
-                    ).toLocaleString()}
-                  </p>
-                </div>
-              ))
+                    <p className="mt-2 text-[10px] text-pebble font-circularxxmono">
+                      {new Date(comment.createdAt).toLocaleString()}
+                    </p>
+                  </div>
+                );
+              })
             )}
           </div>
 
           {/* Add Comment */}
           <div className="mt-6">
             <textarea
-              className="w-full rounded-lg border p-3"
-              rows="4"
+              className="w-full rounded-[var(--radius-inputs)] border border-charcoal bg-charcoal px-4 py-3 text-sm text-fog outline-none transition placeholder:text-stone/70 focus:border-slate focus:ring-1 focus:ring-slate/20 font-circularxx"
+              rows="3"
               placeholder="Write your comment..."
               value={message}
               onChange={(e) =>
@@ -205,7 +210,7 @@ function ComplaintDetails() {
             />
 
             <Button
-              className="mt-3"
+              className="mt-3 cursor-pointer border-transparent"
               onClick={handleCommentSubmit}
               disabled={sending}
             >
@@ -214,7 +219,7 @@ function ComplaintDetails() {
           </div>
         </div>
 
-        <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+        <div className="mt-8 flex flex-col gap-3 sm:flex-row pt-4 border-t border-charcoal/20">
           <Button
             type="button"
             variant="secondary"

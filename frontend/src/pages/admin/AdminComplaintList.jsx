@@ -78,24 +78,24 @@ function AdminComplaintList() {
 
       <TableCard>
         {/* Filter Toolbar */}
-        <div className="mb-6 flex flex-col gap-4 md:flex-row p-4 bg-slate-50/50 border-b border-slate-100 rounded-t-2xl">
+        <div className="flex flex-col gap-4 md:flex-row p-4 bg-charcoal/40 border-b border-charcoal/40 rounded-t-[var(--radius-cards)] font-circularxx">
           <input
             type="text"
-            placeholder="🔍 Search complaints..."
-            className="flex-1 rounded-xl border border-slate-200 bg-white p-2.5 text-sm outline-none focus:border-blue-500 transition"
+            placeholder="Search complaints..."
+            className="flex-1 rounded-[var(--radius-inputs)] border border-charcoal bg-charcoal px-4 py-2.5 text-sm text-fog outline-none focus:border-slate transition placeholder:text-stone/70"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
 
           <select
-            className="rounded-xl border border-slate-200 bg-white p-2.5 text-sm font-semibold text-slate-700 outline-none focus:border-blue-500 transition cursor-pointer"
+            className="rounded-[var(--radius-inputs)] border border-charcoal bg-charcoal px-4 py-2.5 text-sm font-normal text-fog outline-none focus:border-slate transition cursor-pointer"
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
           >
-            <option value="All">All Status</option>
-            <option value="Pending">Pending</option>
-            <option value="In Progress">In Progress</option>
-            <option value="Resolved">Resolved</option>
+            <option value="All" className="bg-graphite text-fog">All Status</option>
+            <option value="Pending" className="bg-graphite text-fog">Pending</option>
+            <option value="In Progress" className="bg-graphite text-fog">In Progress</option>
+            <option value="Resolved" className="bg-graphite text-fog">Resolved</option>
           </select>
         </div>
 
@@ -124,20 +124,20 @@ function AdminComplaintList() {
             <tbody>
               {filteredComplaints.map((complaint) => (
                 <TableRow key={complaint._id}>
-                  <Td className="font-semibold text-slate-900">
+                  <Td className="font-semibold text-fog font-circularxx">
                     {complaint.title}
                   </Td>
 
-                  <Td>{complaint.category}</Td>
+                  <Td className="font-circularxx">{complaint.category}</Td>
 
                   <Td>
                     <span
-                      className={`rounded-full px-3 py-1 text-xs font-bold ${
+                      className={`inline-flex rounded-[var(--radius-badges)] border border-charcoal bg-charcoal px-3 py-1 text-[10px] font-circularxxmono tracking-[0.05em] font-normal ${
                         complaint.priority === "High"
-                          ? "bg-red-50 text-red-600 border border-red-100"
+                          ? "text-signal-red"
                           : complaint.priority === "Medium"
-                          ? "bg-amber-50 text-amber-600 border border-amber-100"
-                          : "bg-emerald-50 text-emerald-600 border border-emerald-100"
+                          ? "text-pilot-gold"
+                          : "text-pebble"
                       }`}
                     >
                       {complaint.priority}
@@ -148,14 +148,14 @@ function AdminComplaintList() {
                     <StatusBadge status={complaint.status} />
                   </Td> 
 
-                  <Td className="text-slate-500 font-medium">
+                  <Td className="font-circularxxmono text-xs text-pebble">
                     {new Date(complaint.createdAt).toLocaleDateString("en-GB")}
                   </Td>
 
                   <Td>
                     <button
                       onClick={() => setSelectedComplaintId(complaint._id)}
-                      className="font-bold text-[#2563EB] hover:text-blue-700 hover:underline transition cursor-pointer"
+                      className="font-semibold text-pilot-gold hover:underline transition cursor-pointer bg-transparent border-0 p-0 font-circularxxmono text-xs tracking-wide"
                     >
                       Update
                     </button>

@@ -11,12 +11,10 @@ import {
   FaUserShield,
   FaCommentAlt,
   FaUpload,
-  FaBuilding,
   FaChevronDown,
   FaGithub,
   FaLock,
-  FaSignInAlt,
-  FaInfoCircle
+  FaSignInAlt
 } from "react-icons/fa";
 
 // Animated Counter Component using IntersectionObserver
@@ -69,7 +67,7 @@ function StatCounter({ target, duration = 1500, suffix = "" }) {
   }, [isVisible, target, duration]);
 
   return (
-    <span ref={elementRef} className="font-extrabold text-slate-900 tracking-tight">
+    <span ref={elementRef} className="font-bold text-laser-violet tracking-tight">
       {count}
       {suffix}
     </span>
@@ -80,25 +78,25 @@ function StatCounter({ target, duration = 1500, suffix = "" }) {
 function FaqItem({ question, answer }) {
   const [isOpen, setIsOpen] = useState(false);
   return (
-    <div className="border border-slate-100 rounded-2xl bg-white overflow-hidden shadow-sm hover:shadow-md transition duration-200">
+    <div className="border border-[#e1e4e8] rounded-[var(--radius-cards)] bg-paper-white overflow-hidden transition-all duration-200">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center justify-between p-5 text-left font-semibold text-slate-800 hover:text-blue-600 transition"
+        className="w-full flex items-center justify-between p-5 text-left font-semibold text-mulberry-deep hover:text-laser-violet transition font-uncut-sans"
       >
         <span>{question}</span>
         <FaChevronDown
-          className={`text-slate-400 transition-transform duration-200 ${
-            isOpen ? "transform rotate-180 text-blue-600" : ""
+          className={`text-ash-wisp transition-transform duration-200 ${
+            isOpen ? "transform rotate-180 text-laser-violet" : ""
           }`}
-          size={14}
+          size={12}
         />
       </button>
       <div
         className={`transition-all duration-300 ease-in-out ${
-          isOpen ? "max-h-48 border-t border-slate-50" : "max-h-0"
+          isOpen ? "max-h-48 border-t border-[#f0f0f0]" : "max-h-0"
         } overflow-hidden`}
       >
-        <p className="p-5 text-sm text-slate-500 leading-relaxed bg-slate-50/50">
+        <p className="p-5 text-sm text-[#737373] leading-relaxed bg-[#f7f6f5]/55 font-inter">
           {answer}
         </p>
       </div>
@@ -127,33 +125,33 @@ function LandingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-950 font-sans antialiased">
+    <div className="min-h-screen bg-obsidian text-fog font-circularxx antialiased relative overflow-hidden">
       {/* 1. STICKY NAVIGATION BAR */}
-      <header className="sticky top-0 z-50 border-b border-slate-200/60 bg-white/90 backdrop-blur-md shadow-sm">
+      <header className="sticky top-0 z-50 border-b border-charcoal bg-obsidian/90 backdrop-blur-md shadow-subtle">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center gap-3 cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>
-            <div className="h-9 w-9 rounded-xl bg-blue-600 flex items-center justify-center text-white font-bold shadow-md shadow-blue-200">
+          <div className="flex items-center gap-2.5 cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>
+            <div className="h-8 w-8 rounded-lg bg-pilot-gold flex items-center justify-center text-obsidian font-bold font-whyte shadow-[0_0_10px_rgba(202,177,106,0.2)]">
               C
             </div>
-            <span className="text-base font-bold tracking-tight text-slate-900 hidden md:inline">
+            <span className="text-base font-light tracking-tight text-fog hidden md:inline font-whyte">
               Campus Complaint Management System
             </span>
-            <span className="text-base font-bold tracking-tight text-slate-900 md:hidden">
+            <span className="text-base font-light tracking-tight text-fog md:hidden font-whyte">
               CCMS
             </span>
           </div>
 
-          <nav className="hidden lg:flex items-center gap-8 text-sm font-semibold text-slate-600">
-            <button onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} className="hover:text-blue-600 transition cursor-pointer">
+          <nav className="hidden lg:flex items-center gap-8 text-sm font-normal text-mist">
+            <button onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} className="hover:text-pilot-gold transition cursor-pointer bg-transparent border-0 font-medium">
               Home
             </button>
-            <button onClick={() => scrollToSection("features")} className="hover:text-blue-600 transition cursor-pointer">
+            <button onClick={() => scrollToSection("features")} className="hover:text-pilot-gold transition cursor-pointer bg-transparent border-0 font-medium">
               Features
             </button>
-            <button onClick={() => scrollToSection("about")} className="hover:text-blue-600 transition cursor-pointer">
+            <button onClick={() => scrollToSection("about")} className="hover:text-pilot-gold transition cursor-pointer bg-transparent border-0 font-medium">
               About
             </button>
-            <button onClick={() => scrollToSection("contact")} className="hover:text-blue-600 transition cursor-pointer">
+            <button onClick={() => scrollToSection("contact")} className="hover:text-pilot-gold transition cursor-pointer bg-transparent border-0 font-medium">
               Contact
             </button>
           </nav>
@@ -162,7 +160,7 @@ function LandingPage() {
             {user ? (
               <Link
                 to={user.role === "Admin" ? "/admin/dashboard" : "/student/dashboard"}
-                className="inline-flex h-10 items-center justify-center rounded-xl bg-blue-600 hover:bg-blue-700 px-5 text-sm font-bold text-white shadow-md shadow-blue-100 hover:scale-[1.02] active:scale-[0.98] transition cursor-pointer"
+                className="inline-flex h-9 items-center justify-center rounded-[var(--radius-buttons)] bg-pilot-gold px-5 text-xs font-medium text-obsidian shadow-sm hover:scale-[1.02] active:scale-[0.98] transition cursor-pointer"
               >
                 Go to Dashboard
               </Link>
@@ -170,13 +168,13 @@ function LandingPage() {
               <>
                 <Link
                   to="/login"
-                  className="text-sm font-bold text-slate-600 hover:text-blue-600 transition px-3 py-2 flex items-center gap-1.5"
+                  className="text-xs font-medium text-mist hover:text-pilot-gold transition px-3 py-2 flex items-center gap-1.5"
                 >
-                  <FaSignInAlt size={14} /> Sign In
+                  <FaSignInAlt size={12} /> Sign In
                 </Link>
                 <Link
                   to="/register"
-                  className="inline-flex h-10 items-center justify-center rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 px-5 text-sm font-bold text-white shadow-md shadow-blue-100 hover:scale-[1.02] active:scale-[0.98] transition cursor-pointer"
+                  className="inline-flex h-9 items-center justify-center rounded-[var(--radius-buttons)] bg-pilot-gold px-5 text-xs font-medium text-obsidian shadow-sm hover:scale-[1.02] active:scale-[0.98] transition cursor-pointer"
                 >
                   Register
                 </Link>
@@ -186,173 +184,201 @@ function LandingPage() {
         </div>
       </header>
 
-      {/* 2. HERO SECTION */}
-      <section className="relative overflow-hidden bg-white py-16 sm:py-24 border-b border-slate-100">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(37,99,235,0.03),transparent)]" />
-        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:items-center">
+      {/* 2. HERO SECTION & GRADIENT MESH SHOWCASE */}
+      <section className="relative overflow-hidden bg-obsidian py-20 sm:py-28">
+        {/* Background Spotlight and Primitives */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[350px] bg-gradient-to-b from-pilot-gold/5 to-transparent opacity-40 blur-[100px] pointer-events-none rounded-full" />
+        
+        {/* Scattered background geometric shapes (15% opacity, clipped edges) */}
+        <svg className="absolute top-12 left-[10%] w-16 h-16 text-pilot-gold/15 rotate-12 pointer-events-none" viewBox="0 0 100 100" fill="currentColor">
+          <polygon points="0,100 100,100 0,0" />
+        </svg>
+        <div className="absolute top-48 right-[8%] w-16 h-16 bg-circuit-green/15 rounded-tl-full pointer-events-none" />
+        <svg className="absolute bottom-12 left-[15%] w-12 h-12 text-signal-red/15 -rotate-45 pointer-events-none" viewBox="0 0 100 100" fill="currentColor">
+          <polygon points="0,100 100,100 0,0" />
+        </svg>
+        <div className="absolute bottom-28 right-[12%] w-20 h-20 bg-pilot-gold/15 rounded-br-full pointer-events-none" />
+        <div className="absolute top-[35%] left-[22%] w-4 h-4 bg-circuit-green/15 rotate-45 pointer-events-none" />
+        
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex flex-col items-center text-center space-y-8">
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-[var(--radius-badges)] text-[10px] font-medium font-circularxxmono tracking-[0.05em] bg-charcoal border border-charcoal text-pilot-gold">
+            <span className="h-1.5 w-1.5 rounded-full bg-pilot-gold animate-pulse" />
+            UNIFIED CAMPUS HELPDESK
+          </span>
           
-          <div className="lg:col-span-6 space-y-6 text-left">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-blue-50 text-blue-600">
-              <span className="h-1.5 w-1.5 rounded-full bg-blue-500 animate-pulse" />
-              Unified Campus Helpdesk
-            </span>
-            <h1 className="text-4xl font-extrabold tracking-tight text-slate-900 sm:text-6xl leading-[1.1] leading-none">
-              Campus Complaint <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">Management System</span>
-            </h1>
-            <p className="text-base sm:text-lg text-slate-500 leading-relaxed max-w-lg">
-              A smart platform for students and administrators to report, track, and resolve campus complaints efficiently.
-            </p>
-            <div className="flex flex-wrap gap-4 pt-2">
-              <Link
-                to={user ? (user.role === "Admin" ? "/admin/dashboard" : "/student/dashboard") : "/register"}
-                className="inline-flex h-12 items-center justify-center rounded-xl bg-blue-600 hover:bg-blue-700 px-6 text-sm font-bold text-white shadow-lg shadow-blue-100 hover:scale-[1.02] active:scale-[0.98] transition cursor-pointer"
-              >
-                Get Started <FaArrowRight className="ml-2" size={12} />
-              </Link>
-              <Link
-                to={user ? (user.role === "Admin" ? "/admin/dashboard" : "/student/dashboard") : "/login"}
-                className="inline-flex h-12 items-center justify-center rounded-xl border border-slate-200 bg-white hover:bg-slate-50 px-6 text-sm font-bold text-slate-700 hover:scale-[1.02] active:scale-[0.98] transition cursor-pointer"
-              >
-                Login
-              </Link>
-            </div>
+          <h1 className="text-4xl font-light tracking-[-0.056em] text-fog sm:text-7xl max-w-3xl leading-[1.0] font-whyte">
+            Campus Complaint <br />
+            <span className="text-pilot-gold font-light">Management System</span>
+          </h1>
+          
+          <p className="text-sm sm:text-base text-pebble leading-relaxed max-w-xl font-normal">
+            A secure command center for student dispatch reports and operator resolution workflows. Built for high-efficiency operations.
+          </p>
+          
+          <div className="flex flex-wrap justify-center gap-4 pt-2">
+            <Link
+              to={user ? (user.role === "Admin" ? "/admin/dashboard" : "/student/dashboard") : "/register"}
+              className="inline-flex h-11 items-center justify-center rounded-[var(--radius-buttons)] bg-pilot-gold px-6 text-sm font-medium text-obsidian shadow-sm hover:scale-[1.02] active:scale-[0.98] transition cursor-pointer"
+            >
+              Get Started <FaArrowRight className="ml-2" size={12} />
+            </Link>
+            <Link
+              to={user ? (user.role === "Admin" ? "/admin/dashboard" : "/student/dashboard") : "/login"}
+              className="inline-flex h-11 items-center justify-center rounded-[var(--radius-buttons)] border border-slate bg-transparent text-fog px-6 text-sm font-normal hover:border-ash hover:bg-slate/10 hover:scale-[1.02] active:scale-[0.98] transition cursor-pointer"
+            >
+              Login
+            </Link>
           </div>
 
-          {/* Hero mockup illustration */}
-          <div className="lg:col-span-6 flex justify-center lg:justify-end">
-            <div className="relative w-full max-w-lg animate-float">
-              {/* Main dashboard mockup frame */}
-              <div className="rounded-2xl border border-slate-100 bg-white p-6 shadow-2xl space-y-4">
-                <div className="flex justify-between items-center pb-4 border-b border-slate-100">
-                  <div className="flex items-center gap-2">
-                    <span className="h-3.5 w-3.5 rounded-full bg-red-400" />
-                    <span className="h-3.5 w-3.5 rounded-full bg-yellow-400" />
-                    <span className="h-3.5 w-3.5 rounded-full bg-green-400" />
-                  </div>
-                  <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400 bg-slate-50 px-2.5 py-1 rounded-md">
-                    Mock Dashboard
-                  </span>
+          {/* Product showcase mockup frame */}
+          <div className="w-full max-w-4xl pt-16 flex justify-center relative">
+            <div className="relative w-full rounded-[var(--radius-cards)] border border-charcoal bg-graphite p-5 shadow-xl space-y-4 max-w-3xl scale-in animate-float">
+              
+              <div className="flex justify-between items-center pb-4 border-b border-charcoal/40">
+                <div className="flex items-center gap-2">
+                  <span className="h-3 w-3 rounded-full bg-pilot-gold/40 border border-pilot-gold" />
+                  <span className="h-3 w-3 rounded-full bg-ash/30 border border-ash" />
+                  <span className="h-3 w-3 rounded-full bg-slate/30 border border-slate" />
                 </div>
+                {/* Monospaced Annotations tag */}
+                <span className="text-[10px] font-medium font-circularxxmono tracking-[0.05em] text-mist bg-charcoal px-3 py-1 rounded-[var(--radius-badges)] border border-charcoal/40">
+                  CONSOLE::LIVE_TICKETS
+                </span>
+              </div>
 
-                <div className="grid grid-cols-3 gap-3">
-                  <div className="bg-blue-50/50 p-3 rounded-xl border border-blue-50">
-                    <span className="text-[10px] text-blue-600 font-bold uppercase">Total</span>
-                    <p className="text-xl font-extrabold text-slate-900 mt-1">42</p>
-                  </div>
-                  <div className="bg-amber-50/50 p-3 rounded-xl border border-amber-50">
-                    <span className="text-[10px] text-amber-600 font-bold uppercase">Active</span>
-                    <p className="text-xl font-extrabold text-slate-900 mt-1">12</p>
-                  </div>
-                  <div className="bg-emerald-50/50 p-3 rounded-xl border border-emerald-50">
-                    <span className="text-[10px] text-emerald-600 font-bold uppercase">Solved</span>
-                    <p className="text-xl font-extrabold text-slate-900 mt-1">30</p>
-                  </div>
+              <div className="grid grid-cols-3 gap-3">
+                <div className="bg-charcoal p-3 rounded-[var(--radius-inputs)] border border-charcoal/30">
+                  <span className="text-[9px] text-pebble font-semibold font-circularxxmono tracking-[0.05em] uppercase">Total</span>
+                  <p className="text-xl font-light text-fog mt-1 font-whyte">42</p>
                 </div>
-
-                <div className="space-y-2 pt-2">
-                  <div className="flex justify-between items-center p-3 rounded-xl bg-slate-50 border border-slate-100 text-xs">
-                    <span className="font-semibold text-slate-800">Water Leakage in Hostel A</span>
-                    <span className="px-2 py-0.5 rounded-full bg-amber-50 text-amber-600 border border-amber-100 font-bold">In Progress</span>
-                  </div>
-                  <div className="flex justify-between items-center p-3 rounded-xl bg-slate-50 border border-slate-100 text-xs">
-                    <span className="font-semibold text-slate-800">Library WiFi Unstable</span>
-                    <span className="px-2 py-0.5 rounded-full bg-blue-50 text-blue-600 border border-blue-100 font-bold">Pending</span>
-                  </div>
-                  <div className="flex justify-between items-center p-3 rounded-xl bg-slate-50 border border-slate-100 text-xs">
-                    <span className="font-semibold text-slate-800">Classroom 302 Projector Fix</span>
-                    <span className="px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-600 border border-emerald-100 font-bold">Resolved</span>
-                  </div>
+                <div className="bg-charcoal p-3 rounded-[var(--radius-inputs)] border border-charcoal/30">
+                  <span className="text-[9px] text-pilot-gold font-semibold font-circularxxmono tracking-[0.05em] uppercase">Active</span>
+                  <p className="text-xl font-light text-fog mt-1 font-whyte">12</p>
+                </div>
+                <div className="bg-charcoal p-3 rounded-[var(--radius-inputs)] border border-charcoal/30">
+                  <span className="text-[9px] text-mist font-semibold font-circularxxmono tracking-[0.05em] uppercase">Solved</span>
+                  <p className="text-xl font-light text-fog mt-1 font-whyte">30</p>
                 </div>
               </div>
 
-              {/* Decorative floating cards */}
-              <div className="absolute -top-6 -right-6 bg-slate-900 text-white rounded-2xl p-4 shadow-xl border border-slate-800 hidden md:block max-w-40">
-                <p className="text-[10px] font-bold text-indigo-400">RESOLUTION SPEED</p>
-                <p className="text-lg font-extrabold mt-1">94% &uarr;</p>
-                <p className="text-[9px] text-slate-400 mt-1 leading-normal">Resolving tickets in under 24 hours.</p>
+              <div className="space-y-2.5 pt-2">
+                <div className="flex justify-between items-center p-3 rounded-[var(--radius-inputs)] bg-charcoal/40 border border-charcoal/20 text-xs">
+                  <span className="font-medium text-mist">Water Leakage in Hostel A</span>
+                  <span className="inline-flex rounded-[var(--radius-badges)] border border-charcoal bg-charcoal px-2.5 py-0.5 text-[9px] font-circularxxmono tracking-[0.05em] text-pilot-gold">In Progress</span>
+                </div>
+                <div className="flex justify-between items-center p-3 rounded-[var(--radius-inputs)] bg-charcoal/40 border border-charcoal/20 text-xs">
+                  <span className="font-medium text-mist">Library WiFi Unstable</span>
+                  <span className="inline-flex rounded-[var(--radius-badges)] border border-charcoal bg-obsidian px-2.5 py-0.5 text-[9px] font-circularxxmono tracking-[0.05em] text-stone">Pending</span>
+                </div>
+                <div className="flex justify-between items-center p-3 rounded-[var(--radius-inputs)] bg-charcoal/40 border border-charcoal/20 text-xs">
+                  <span className="font-medium text-mist">Classroom 302 Projector Fix</span>
+                  <span className="inline-flex rounded-[var(--radius-badges)] border border-charcoal bg-graphite px-2.5 py-0.5 text-[9px] font-circularxxmono tracking-[0.05em] text-mist">Resolved</span>
+                </div>
               </div>
+            </div>
+
+            {/* Floating Resolution Speed Badge */}
+            <div className="absolute top-10 right-4 lg:right-20 bg-graphite text-fog rounded-[var(--radius-cards)] p-4 shadow-xl border border-charcoal hidden md:block max-w-44 text-left animate-fadeIn">
+              <p className="text-[9px] font-medium text-pilot-gold font-circularxxmono tracking-[0.05em]">SLA STATS</p>
+              <p className="text-lg font-light mt-1 text-fog font-whyte">94% Speed &uarr;</p>
+              <p className="text-[10px] text-pebble mt-1 leading-normal">Resolving tickets in under 24 hours average.</p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* 3. FEATURES SECTION */}
-      <section id="features" className="py-20 sm:py-28 bg-slate-50">
+      {/* 3. PARTNER LOGO STRIP */}
+      <section className="py-12 border-t border-b border-charcoal/40 bg-obsidian">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center space-y-6">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-pebble font-circularxx">
+            PROUDLY SUPPORTED BY
+          </p>
+          <div className="flex flex-wrap justify-center items-center gap-12 sm:gap-20 text-xs font-circularxxmono tracking-[0.05em] text-mist">
+            <span className="opacity-60 hover:opacity-100 hover:text-pilot-gold transition">HOSTEL_COUNCIL</span>
+            <span className="opacity-60 hover:opacity-100 hover:text-pilot-gold transition">FACILITIES_MGMT</span>
+            <span className="opacity-60 hover:opacity-100 hover:text-pilot-gold transition">IT_SERVICES_UNIT</span>
+            <span className="opacity-60 hover:opacity-100 hover:text-pilot-gold transition">LIBRARY_ADMIN</span>
+          </div>
+        </div>
+      </section>
+
+      {/* 4. FEATURES SECTION (REDESIGNED TO OBSIDIAN SYSTEM) */}
+      <section id="features" className="py-20 sm:py-28 bg-obsidian text-fog relative">
+        <div className="absolute top-1/3 right-[5%] w-16 h-16 bg-signal-red/15 rounded-tl-full pointer-events-none" />
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto space-y-3">
-            <span className="text-xs font-bold uppercase tracking-wider text-blue-600">Why Choose CCMS?</span>
-            <h2 className="text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
+          <div className="text-center max-w-3xl mx-auto space-y-3 mb-16">
+            <span className="text-xs font-semibold uppercase tracking-[0.08em] text-pilot-gold font-circularxx">WHY CHOOSE CCMS?</span>
+            <h2 className="text-3xl font-light tracking-[-0.04em] text-fog sm:text-5xl font-whyte">
               Engineered for seamless campus communication
             </h2>
-            <p className="text-slate-500 text-sm leading-relaxed">
+            <p className="text-pebble text-sm leading-relaxed max-w-2xl mx-auto">
               Ditch the paper forms and unanswered emails. CCMS delivers a robust digital suite ensuring transparency and rapid accountability.
             </p>
           </div>
 
-          <div className="mt-16 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {/* Feature 1 */}
-            <div className="rounded-2xl border border-slate-100 bg-white p-6 shadow-sm hover:shadow-md hover:-translate-y-1 transition duration-300">
-              <div className="h-10 w-10 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center mb-5">
-                <FaClipboardList size={16} />
+            <div className="p-8 bg-graphite border border-charcoal rounded-xl space-y-4 hover:-translate-y-0.5 transition duration-300">
+              <div className="h-10 w-10 text-pilot-gold flex items-center justify-start">
+                <FaClipboardList size={24} />
               </div>
-              <h3 className="text-lg font-bold text-slate-900">Complaint Submission</h3>
-              <p className="text-slate-500 text-sm leading-relaxed mt-2">
+              <h3 className="text-lg font-medium text-fog font-circularxx">Complaint Submission</h3>
+              <p className="text-pebble text-sm leading-relaxed">
                 Easily lodge complaints with descriptive details, exact campus locations, and designated utility categories.
               </p>
             </div>
 
             {/* Feature 2 */}
-            <div className="rounded-2xl border border-slate-100 bg-white p-6 shadow-sm hover:shadow-md hover:-translate-y-1 transition duration-300">
-              <div className="h-10 w-10 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center mb-5">
-                <FaClock size={16} />
+            <div className="p-8 bg-graphite border border-charcoal rounded-xl space-y-4 hover:-translate-y-0.5 transition duration-300">
+              <div className="h-10 w-10 text-pilot-gold flex items-center justify-start">
+                <FaClock size={24} />
               </div>
-              <h3 className="text-lg font-bold text-slate-900">Real-Time Tracking</h3>
-              <p className="text-slate-500 text-sm leading-relaxed mt-2">
-                Monitor ticket states dynamically using animated progress bars and timestamped operations updates.
+              <h3 className="text-lg font-medium text-fog font-circularxx">Real-Time Tracking</h3>
+              <p className="text-pebble text-sm leading-relaxed">
+                Monitor ticket states dynamically using progress indicators and timestamped operational logs.
               </p>
             </div>
 
             {/* Feature 3 */}
-            <div className="rounded-2xl border border-slate-100 bg-white p-6 shadow-sm hover:shadow-md hover:-translate-y-1 transition duration-300">
-              <div className="h-10 w-10 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center mb-5">
-                <FaUserShield size={16} />
+            <div className="p-8 bg-graphite border border-charcoal rounded-xl space-y-4 hover:-translate-y-0.5 transition duration-300">
+              <div className="h-10 w-10 text-pilot-gold flex items-center justify-start">
+                <FaUserShield size={24} />
               </div>
-              <h3 className="text-lg font-bold text-slate-900">Admin Dashboard</h3>
-              <p className="text-slate-500 text-sm leading-relaxed mt-2">
-                Advanced dispatch interface for operators to route tickets, pick priorities, and assign technician teams.
+              <h3 className="text-lg font-medium text-fog font-circularxx">Admin Dashboard</h3>
+              <p className="text-pebble text-sm leading-relaxed">
+                Advanced dispatch interface for operators to route tickets, pick priorities, and assign maintenance teams.
               </p>
             </div>
 
             {/* Feature 4 */}
-            <div className="rounded-2xl border border-slate-100 bg-white p-6 shadow-sm hover:shadow-md hover:-translate-y-1 transition duration-300">
-              <div className="h-10 w-10 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center mb-5">
-                <FaUpload size={16} />
+            <div className="p-8 bg-graphite border border-charcoal rounded-xl space-y-4 hover:-translate-y-0.5 transition duration-300">
+              <div className="h-10 w-10 text-pilot-gold flex items-center justify-start">
+                <FaUpload size={24} />
               </div>
-              <h3 className="text-lg font-bold text-slate-900">Image Upload</h3>
-              <p className="text-slate-500 text-sm leading-relaxed mt-2">
+              <h3 className="text-lg font-medium text-fog font-circularxx">Image Upload</h3>
+              <p className="text-pebble text-sm leading-relaxed">
                 Attach photo evidence to assist facilities technicians and ensure quicker resolution accuracy.
               </p>
             </div>
 
             {/* Feature 5 */}
-            <div className="rounded-2xl border border-slate-100 bg-white p-6 shadow-sm hover:shadow-md hover:-translate-y-1 transition duration-300">
-              <div className="h-10 w-10 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center mb-5">
-                <FaCommentAlt size={16} />
+            <div className="p-8 bg-graphite border border-charcoal rounded-xl space-y-4 hover:-translate-y-0.5 transition duration-300">
+              <div className="h-10 w-10 text-pilot-gold flex items-center justify-start">
+                <FaCommentAlt size={24} />
               </div>
-              <h3 className="text-lg font-bold text-slate-900">Discussion & Comments</h3>
-              <p className="text-slate-500 text-sm leading-relaxed mt-2">
+              <h3 className="text-lg font-medium text-fog font-circularxx">Discussion & Comments</h3>
+              <p className="text-pebble text-sm leading-relaxed">
                 Communicate directly with resolution desks. Write updates or ask follow-up questions in-app.
               </p>
             </div>
 
             {/* Feature 6 */}
-            <div className="rounded-2xl border border-slate-100 bg-white p-6 shadow-sm hover:shadow-md hover:-translate-y-1 transition duration-300">
-              <div className="h-10 w-10 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center mb-5">
-                <FaLock size={16} />
+            <div className="p-8 bg-graphite border border-charcoal rounded-xl space-y-4 hover:-translate-y-0.5 transition duration-300">
+              <div className="h-10 w-10 text-pilot-gold flex items-center justify-start">
+                <FaLock size={24} />
               </div>
-              <h3 className="text-lg font-bold text-slate-900">Secure Authentication</h3>
-              <p className="text-slate-500 text-sm leading-relaxed mt-2">
+              <h3 className="text-lg font-medium text-fog font-circularxx">Secure Authentication</h3>
+              <p className="text-pebble text-sm leading-relaxed">
                 Restricted user boundaries using secure JSON Web Token verification, protecting privacy data.
               </p>
             </div>
@@ -360,71 +386,71 @@ function LandingPage() {
         </div>
       </section>
 
-      {/* 4. HOW IT WORKS */}
-      <section className="py-20 bg-white border-y border-slate-100">
+      {/* 5. HOW IT WORKS (REDESIGNED) */}
+      <section className="py-20 sm:py-24 bg-obsidian text-fog border-y border-charcoal/40">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto space-y-3">
-            <span className="text-xs font-bold uppercase tracking-wider text-blue-600">The Roadmap</span>
-            <h2 className="text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
+          <div className="text-center max-w-3xl mx-auto space-y-3 mb-16">
+            <span className="text-xs font-semibold uppercase tracking-[0.08em] text-pilot-gold font-circularxx">THE ROADMAP</span>
+            <h2 className="text-3xl font-light tracking-[-0.04em] text-fog sm:text-5xl font-whyte">
               How CCMS operates
             </h2>
-            <p className="text-slate-500 text-sm leading-relaxed">
+            <p className="text-pebble text-sm max-w-md mx-auto">
               A transparent, simple protocol bridging reports straight to technical teams.
             </p>
           </div>
 
-          <div className="mt-16 grid grid-cols-1 gap-8 md:grid-cols-5 relative">
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-5 text-center">
             {/* Step 1 */}
-            <div className="flex flex-col items-center text-center space-y-3 relative group">
-              <div className="h-12 w-12 rounded-full bg-blue-50 border border-blue-100 text-blue-600 flex items-center justify-center font-bold z-10 group-hover:scale-105 transition">
-                <FaUserGraduate size={16} />
+            <div className="flex flex-col items-center space-y-3">
+              <div className="h-11 w-11 rounded-full bg-graphite border border-charcoal text-pilot-gold flex items-center justify-center font-bold">
+                <FaUserGraduate size={14} />
               </div>
-              <h4 className="text-sm font-bold text-slate-900">1. Student Login</h4>
-              <p className="text-xs text-slate-500 max-w-xs leading-relaxed">
+              <h4 className="text-sm font-medium text-fog">1. Student Login</h4>
+              <p className="text-xs text-pebble max-w-xs leading-relaxed">
                 Log into the student portal using secure credentials.
               </p>
             </div>
 
             {/* Step 2 */}
-            <div className="flex flex-col items-center text-center space-y-3 relative group">
-              <div className="h-12 w-12 rounded-full bg-blue-50 border border-blue-100 text-blue-600 flex items-center justify-center font-bold z-10 group-hover:scale-105 transition">
-                <FaClipboardList size={16} />
+            <div className="flex flex-col items-center space-y-3">
+              <div className="h-11 w-11 rounded-full bg-graphite border border-charcoal text-pilot-gold flex items-center justify-center font-bold">
+                <FaClipboardList size={14} />
               </div>
-              <h4 className="text-sm font-bold text-slate-900">2. Submit Complaint</h4>
-              <p className="text-xs text-slate-500 max-w-xs leading-relaxed">
+              <h4 className="text-sm font-medium text-fog">2. Submit Complaint</h4>
+              <p className="text-xs text-pebble max-w-xs leading-relaxed">
                 Fill details, pick location, add category, and upload photos.
               </p>
             </div>
 
             {/* Step 3 */}
-            <div className="flex flex-col items-center text-center space-y-3 relative group">
-              <div className="h-12 w-12 rounded-full bg-blue-50 border border-blue-100 text-blue-600 flex items-center justify-center font-bold z-10 group-hover:scale-105 transition">
-                <FaUserShield size={16} />
+            <div className="flex flex-col items-center space-y-3">
+              <div className="h-11 w-11 rounded-full bg-graphite border border-charcoal text-pilot-gold flex items-center justify-center font-bold">
+                <FaUserShield size={14} />
               </div>
-              <h4 className="text-sm font-bold text-slate-900">3. Admin Reviews</h4>
-              <p className="text-xs text-slate-500 max-w-xs leading-relaxed">
+              <h4 className="text-sm font-medium text-fog">3. Admin Reviews</h4>
+              <p className="text-xs text-pebble max-w-xs leading-relaxed">
                 Operators evaluate issues and assign maintenance departments.
               </p>
             </div>
 
             {/* Step 4 */}
-            <div className="flex flex-col items-center text-center space-y-3 relative group">
-              <div className="h-12 w-12 rounded-full bg-blue-50 border border-blue-100 text-blue-600 flex items-center justify-center font-bold z-10 group-hover:scale-105 transition">
-                <FaClock size={16} />
+            <div className="flex flex-col items-center space-y-3">
+              <div className="h-11 w-11 rounded-full bg-graphite border border-charcoal text-pilot-gold flex items-center justify-center font-bold">
+                <FaClock size={14} />
               </div>
-              <h4 className="text-sm font-bold text-slate-900">4. Status Updated</h4>
-              <p className="text-xs text-slate-500 max-w-xs leading-relaxed">
+              <h4 className="text-sm font-medium text-fog">4. Status Updated</h4>
+              <p className="text-xs text-pebble max-w-xs leading-relaxed">
                 Ticket moves to In Progress with estimates and remarks.
               </p>
             </div>
 
             {/* Step 5 */}
-            <div className="flex flex-col items-center text-center space-y-3 relative group">
-              <div className="h-12 w-12 rounded-full bg-blue-50 border border-blue-100 text-blue-600 flex items-center justify-center font-bold z-10 group-hover:scale-105 transition">
-                <FaCheckCircle size={16} />
+            <div className="flex flex-col items-center space-y-3">
+              <div className="h-11 w-11 rounded-full bg-graphite border border-charcoal text-pilot-gold flex items-center justify-center font-bold">
+                <FaCheckCircle size={14} />
               </div>
-              <h4 className="text-sm font-bold text-slate-900">5. Complaint Resolved</h4>
-              <p className="text-xs text-slate-500 max-w-xs leading-relaxed">
+              <h4 className="text-sm font-medium text-fog">5. Complaint Resolved</h4>
+              <p className="text-xs text-pebble max-w-xs leading-relaxed">
                 Repairs finished. Student is informed, and tickets are locked.
               </p>
             </div>
@@ -432,83 +458,83 @@ function LandingPage() {
         </div>
       </section>
 
-      {/* 5. DASHBOARD PREVIEW */}
-      <section className="py-20 sm:py-28 bg-slate-50">
+      {/* 6. DASHBOARD PREVIEW (OBSIDIAN REDESIGNED) */}
+      <section className="py-20 sm:py-28 bg-obsidian text-fog">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto space-y-3 mb-16">
-            <span className="text-xs font-bold uppercase tracking-wider text-blue-600">The Interfaces</span>
-            <h2 className="text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
+            <span className="text-xs font-semibold uppercase tracking-[0.08em] text-pilot-gold font-circularxx">THE INTERFACES</span>
+            <h2 className="text-3xl font-light tracking-[-0.04em] text-fog sm:text-5xl font-whyte">
               Powering both sides of the system
             </h2>
-            <p className="text-slate-500 text-sm leading-relaxed">
+            <p className="text-pebble text-sm leading-relaxed">
               Explore mock interfaces of our tailored layouts built for students and operators.
             </p>
           </div>
 
           <div className="grid gap-8 lg:grid-cols-2">
             {/* Student Preview Card */}
-            <div className="rounded-3xl bg-white border border-slate-100 p-8 shadow-sm flex flex-col justify-between hover:shadow-md transition">
+            <div className="rounded-[var(--radius-cards)] bg-graphite border border-charcoal p-8 flex flex-col justify-between hover:-translate-y-0.5 transition duration-300">
               <div>
-                <span className="text-[10px] font-bold uppercase tracking-widest text-blue-600 bg-blue-50 px-2.5 py-1 rounded-full">
+                <span className="text-[10px] font-semibold font-circularxxmono tracking-[0.05em] uppercase text-pilot-gold bg-charcoal px-2.5 py-1 rounded-full">
                   Student Portal
                 </span>
-                <h3 className="text-2xl font-bold text-slate-900 mt-4">Student Dashboard</h3>
-                <p className="text-slate-500 text-sm leading-relaxed mt-2">
+                <h3 className="text-2xl font-medium text-fog mt-4 font-circularxx">Student Dashboard</h3>
+                <p className="text-pebble text-sm leading-relaxed mt-2">
                   Submit new reports, track status percentages, read rotating support advice, and view feedback threads in one place.
                 </p>
 
                 {/* Mockup component */}
-                <div className="mt-8 p-5 rounded-2xl bg-slate-50 border border-slate-100 space-y-3 font-sans text-xs">
-                  <div className="flex justify-between items-center font-bold text-slate-400 text-[10px]">
+                <div className="mt-8 p-5 rounded-[var(--radius-inputs)] bg-charcoal border border-charcoal/40 space-y-3 text-xs">
+                  <div className="flex justify-between items-center font-semibold text-pebble text-[9px] font-circularxxmono">
                     <span>MY TICKET PROGRESS</span>
                     <span>66%</span>
                   </div>
-                  <div className="h-2 w-full rounded-full bg-slate-200 overflow-hidden">
-                    <div className="h-full w-2/3 bg-blue-500 rounded-full" />
+                  <div className="h-2 w-full rounded-full bg-obsidian overflow-hidden">
+                    <div className="h-full w-2/3 bg-pilot-gold rounded-full" />
                   </div>
-                  <div className="flex justify-between text-[9px] text-slate-400">
+                  <div className="flex justify-between text-[9px] text-pebble font-medium font-circularxxmono">
                     <span>Pending</span>
-                    <span className="text-blue-600 font-bold">In Progress</span>
+                    <span className="text-pilot-gold font-bold">In Progress</span>
                     <span>Resolved</span>
                   </div>
                 </div>
               </div>
-              <div className="pt-6 mt-6 border-t border-slate-100 flex items-center justify-between">
-                <span className="text-xs font-semibold text-slate-500">Supports: Submission, Comments, Tracking</span>
-                <Link to="/register" className="text-xs font-bold text-blue-600 hover:underline flex items-center gap-1">
+              <div className="pt-6 mt-6 border-t border-charcoal/40 flex items-center justify-between flex-wrap gap-2">
+                <span className="text-[11px] font-medium text-pebble">Supports: Submission, Comments, Tracking</span>
+                <Link to="/register" className="text-xs font-bold text-pilot-gold hover:underline flex items-center gap-1">
                   Create Student Account &rarr;
                 </Link>
               </div>
             </div>
 
             {/* Admin Preview Card */}
-            <div className="rounded-3xl bg-white border border-slate-100 p-8 shadow-sm flex flex-col justify-between hover:shadow-md transition">
+            <div className="rounded-[var(--radius-cards)] bg-graphite border border-charcoal p-8 flex flex-col justify-between hover:-translate-y-0.5 transition duration-300">
               <div>
-                <span className="text-[10px] font-bold uppercase tracking-widest text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-full">
+                <span className="text-[10px] font-semibold font-circularxxmono tracking-[0.05em] uppercase text-mist bg-charcoal px-2.5 py-1 rounded-full">
                   Operations Console
                 </span>
-                <h3 className="text-2xl font-bold text-slate-900 mt-4">Admin Dashboard</h3>
-                <p className="text-slate-500 text-sm leading-relaxed mt-2">
+                <h3 className="text-2xl font-medium text-fog mt-4 font-circularxx">Admin Dashboard</h3>
+                <p className="text-pebble text-sm leading-relaxed mt-2">
                   Assign complaints directly to target departments, pick priority urgency, set estimation target dates, and leave resolution remarks.
                 </p>
 
                 {/* Mockup component */}
-                <div className="mt-8 p-5 rounded-2xl bg-slate-50 border border-slate-100 space-y-3 text-xs">
-                  <div className="grid grid-cols-2 gap-3">
+                <div className="mt-8 p-5 rounded-[var(--radius-inputs)] bg-charcoal border border-charcoal/40 space-y-3 text-xs">
+                  <div className="grid grid-cols-2 gap-3 font-circularxx">
                     <div>
-                      <span className="text-[9px] font-bold text-slate-400 uppercase">DEPT</span>
-                      <div className="mt-1 bg-white p-1.5 border rounded-lg text-[11px] font-semibold text-slate-700">IT Support</div>
+                      <span className="text-[9px] font-semibold text-pebble uppercase font-circularxxmono">DEPT</span>
+                      <div className="mt-1 bg-graphite p-1.5 border border-charcoal rounded-md text-[11px] font-medium text-fog">IT Support</div>
                     </div>
                     <div>
-                      <span className="text-[9px] font-bold text-slate-400 uppercase">PRIORITY</span>
-                      <div className="mt-1 bg-white p-1.5 border rounded-lg text-[11px] font-semibold text-red-600">🔴 High</div>
+                      <span className="text-[9px] font-semibold text-pebble uppercase font-circularxxmono">PRIORITY</span>
+                      <div className="mt-1 bg-graphite p-1.5 border border-charcoal rounded-md text-[11px] font-medium text-pilot-gold">🔴 High</div>
                     </div>
                   </div>
                 </div>
               </div>
-              <div className="pt-6 mt-6 border-t border-slate-100 flex items-center justify-between">
-                <span className="text-xs font-semibold text-slate-500">Supports: Assignments, Estimation Dates, Remarks</span>
-                <Link to="/login" className="text-xs font-bold text-indigo-600 hover:underline flex items-center gap-1">
+              <div className="pt-6 mt-6 border-t border-charcoal/40 flex items-center justify-between flex-wrap gap-2">
+                <span className="text-[11px] font-medium text-pebble">Supports: Assignments, Estimations, Remarks</span>
+                <Link to="/login" className="text-xs font-bold text-pilot-gold hover:underline flex items-center gap-1">
                   Access Portal &rarr;
                 </Link>
               </div>
@@ -517,43 +543,43 @@ function LandingPage() {
         </div>
       </section>
 
-      {/* 6. STATISTICS SECTION */}
-      <section className="py-16 bg-slate-900 text-white relative">
+      {/* 7. STATISTICS SECTION */}
+      <section className="py-20 bg-obsidian text-fog relative border-y border-charcoal/40">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 gap-8 text-center md:grid-cols-4">
             
-            <div className="space-y-1">
-              <p className="text-4xl sm:text-5xl font-extrabold text-blue-500">
+            <div className="space-y-2">
+              <p className="text-4xl sm:text-5xl font-light font-whyte">
                 <StatCounter target="500" suffix="+" />
               </p>
-              <p className="text-xs font-bold uppercase tracking-wider text-slate-400">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.08em] text-pebble font-circularxx">
                 Complaints Submitted
               </p>
             </div>
 
-            <div className="space-y-1">
-              <p className="text-4xl sm:text-5xl font-extrabold text-emerald-500">
+            <div className="space-y-2">
+              <p className="text-4xl sm:text-5xl font-light font-whyte">
                 <StatCounter target="350" suffix="+" />
               </p>
-              <p className="text-xs font-bold uppercase tracking-wider text-slate-400">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.08em] text-pebble font-circularxx">
                 Resolved Issues
               </p>
             </div>
 
-            <div className="space-y-1">
-              <p className="text-4xl sm:text-5xl font-extrabold text-indigo-500">
+            <div className="space-y-2">
+              <p className="text-4xl sm:text-5xl font-light font-whyte">
                 <StatCounter target="200" suffix="+" />
               </p>
-              <p className="text-xs font-bold uppercase tracking-wider text-slate-400">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.08em] text-pebble font-circularxx">
                 Students Enrolled
               </p>
             </div>
 
-            <div className="space-y-1">
-              <p className="text-4xl sm:text-5xl font-extrabold text-amber-500">
+            <div className="space-y-2">
+              <p className="text-4xl sm:text-5xl font-light font-whyte">
                 <StatCounter target="10" suffix="+" />
               </p>
-              <p className="text-xs font-bold uppercase tracking-wider text-slate-400">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.08em] text-pebble font-circularxx">
                 Departments Assigned
               </p>
             </div>
@@ -562,62 +588,62 @@ function LandingPage() {
         </div>
       </section>
 
-      {/* 7. BENEFITS SECTION */}
-      <section id="about" className="py-20 sm:py-28 bg-white">
+      {/* 8. BENEFITS SECTION */}
+      <section id="about" className="py-20 sm:py-28 bg-obsidian text-fog">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto space-y-3 mb-16">
-            <span className="text-xs font-bold uppercase tracking-wider text-blue-600">The Value</span>
-            <h2 className="text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
+            <span className="text-xs font-semibold uppercase tracking-[0.08em] text-pilot-gold font-circularxx">THE VALUE</span>
+            <h2 className="text-3xl font-light tracking-[-0.04em] text-fog sm:text-5xl font-whyte">
               Bringing value to every tier
             </h2>
-            <p className="text-slate-500 text-sm leading-relaxed">
-              Transparency, speed, and planning organization across the entire institution.
+            <p className="text-pebble text-sm leading-relaxed">
+              Transparency, speed, and organizational structure across the entire institution.
             </p>
           </div>
 
           <div className="grid gap-6 md:grid-cols-3">
             {/* For Students */}
-            <div className="rounded-2xl border border-slate-100 bg-slate-50/50 p-8 flex flex-col justify-between hover:shadow-md hover:-translate-y-0.5 transition duration-200">
+            <div className="rounded-[var(--radius-cards)] bg-graphite border border-charcoal p-8 flex flex-col justify-between hover:shadow-subtle transition">
               <div className="space-y-4">
-                <div className="h-10 w-10 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center font-bold">
+                <div className="h-10 w-10 bg-charcoal border border-charcoal/40 text-pilot-gold rounded-[var(--radius-inputs)] flex items-center justify-center font-bold">
                   S
                 </div>
-                <h3 className="text-xl font-bold text-slate-950">For Students</h3>
-                <ul className="space-y-3 text-sm text-slate-600">
+                <h3 className="text-xl font-medium text-fog font-circularxx">For Students</h3>
+                <ul className="space-y-3 text-sm text-pebble">
                   <li className="flex items-center gap-2">
-                    <span className="h-1.5 w-1.5 rounded-full bg-blue-600" />
+                    <span className="h-1.5 w-1.5 rounded-full bg-pilot-gold" />
                     Easy complaint submission
                   </li>
                   <li className="flex items-center gap-2">
-                    <span className="h-1.5 w-1.5 rounded-full bg-blue-600" />
+                    <span className="h-1.5 w-1.5 rounded-full bg-pilot-gold" />
                     Track progress in real-time
                   </li>
                   <li className="flex items-center gap-2">
-                    <span className="h-1.5 w-1.5 rounded-full bg-blue-600" />
-                    Receive comments and notifications
+                    <span className="h-1.5 w-1.5 rounded-full bg-pilot-gold" />
+                    Receive comments and updates
                   </li>
                 </ul>
               </div>
             </div>
 
             {/* For Administrators */}
-            <div className="rounded-2xl border border-slate-100 bg-slate-50/50 p-8 flex flex-col justify-between hover:shadow-md hover:-translate-y-0.5 transition duration-200">
+            <div className="rounded-[var(--radius-cards)] bg-graphite border border-charcoal p-8 flex flex-col justify-between hover:shadow-subtle transition">
               <div className="space-y-4">
-                <div className="h-10 w-10 bg-indigo-50 text-indigo-600 rounded-xl flex items-center justify-center font-bold">
+                <div className="h-10 w-10 bg-charcoal border border-charcoal/40 text-pilot-gold rounded-[var(--radius-inputs)] flex items-center justify-center font-bold">
                   A
                 </div>
-                <h3 className="text-xl font-bold text-slate-950">For Administrators</h3>
-                <ul className="space-y-3 text-sm text-slate-600">
+                <h3 className="text-xl font-medium text-fog font-circularxx">For Administrators</h3>
+                <ul className="space-y-3 text-sm text-pebble">
                   <li className="flex items-center gap-2">
-                    <span className="h-1.5 w-1.5 rounded-full bg-indigo-600" />
+                    <span className="h-1.5 w-1.5 rounded-full bg-pilot-gold" />
                     Manage complaints dynamically
                   </li>
                   <li className="flex items-center gap-2">
-                    <span className="h-1.5 w-1.5 rounded-full bg-indigo-600" />
+                    <span className="h-1.5 w-1.5 rounded-full bg-pilot-gold" />
                     Assign priorities instantly
                   </li>
                   <li className="flex items-center gap-2">
-                    <span className="h-1.5 w-1.5 rounded-full bg-indigo-600" />
+                    <span className="h-1.5 w-1.5 rounded-full bg-pilot-gold" />
                     Communicate directly with students
                   </li>
                 </ul>
@@ -625,23 +651,23 @@ function LandingPage() {
             </div>
 
             {/* For Institution */}
-            <div className="rounded-2xl border border-slate-100 bg-slate-50/50 p-8 flex flex-col justify-between hover:shadow-md hover:-translate-y-0.5 transition duration-200">
+            <div className="rounded-[var(--radius-cards)] bg-graphite border border-charcoal p-8 flex flex-col justify-between hover:shadow-subtle transition">
               <div className="space-y-4">
-                <div className="h-10 w-10 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center font-bold">
+                <div className="h-10 w-10 bg-charcoal border border-charcoal/40 text-pilot-gold rounded-[var(--radius-inputs)] flex items-center justify-center font-bold">
                   I
                 </div>
-                <h3 className="text-xl font-bold text-slate-950">For Institution</h3>
-                <ul className="space-y-3 text-sm text-slate-600">
+                <h3 className="text-xl font-medium text-fog font-circularxx">For Institution</h3>
+                <ul className="space-y-3 text-sm text-pebble">
                   <li className="flex items-center gap-2">
-                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-600" />
+                    <span className="h-1.5 w-1.5 rounded-full bg-pilot-gold" />
                     Transparency in campus processes
                   </li>
                   <li className="flex items-center gap-2">
-                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-600" />
-                    Better Response and SLA times
+                    <span className="h-1.5 w-1.5 rounded-full bg-pilot-gold" />
+                    Better SLA response times
                   </li>
                   <li className="flex items-center gap-2">
-                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-600" />
+                    <span className="h-1.5 w-1.5 rounded-full bg-pilot-gold" />
                     Organized complaint handling logs
                   </li>
                 </ul>
@@ -651,59 +677,68 @@ function LandingPage() {
         </div>
       </section>
 
-      {/* 8. FAQ SECTION */}
-      <section className="py-20 sm:py-28 bg-slate-50 border-t border-slate-100">
-        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 space-y-12">
+      {/* 9. FAQ SECTION */}
+      <section className="py-20 sm:py-28 bg-obsidian text-fog border-t border-charcoal/40">
+        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 space-y-12 font-circularxx">
           <div className="text-center space-y-3">
-            <span className="text-xs font-bold uppercase tracking-wider text-blue-600">FAQ</span>
-            <h2 className="text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl">
+            <span className="text-xs font-semibold uppercase tracking-[0.08em] text-pilot-gold font-circularxx">FAQ</span>
+            <h2 className="text-3xl font-light tracking-[-0.04em] text-fog sm:text-5xl font-whyte">
               Frequently Asked Questions
             </h2>
-            <p className="text-slate-500 text-sm">
+            <p className="text-pebble text-sm">
               Quick answers about lodging, tracking, and completing tickets.
             </p>
           </div>
 
           <div className="space-y-4">
-            <FaqItem
-              question="How do I submit a complaint?"
-              answer="Log in with your Student account credentials, select 'New Complaint' from your quick actions or the navigation panel, fill out the category details and exact campus location description, and click submit."
-            />
-            <FaqItem
-              question="Can I upload images?"
-              answer="Yes. When submitting a complaint, students can attach photo logs of maintenance and technical problems. The images are stored securely and displayed for facilities supervisors to reference."
-            />
-            <FaqItem
-              question="Can I track complaint status?"
-              answer="Yes! Students can select any complaint they own from their Dashboard to check live percentage updates moving from Pending &rarr; In Progress &rarr; Resolved."
-            />
-            <FaqItem
-              question="How does the admin respond?"
-              answer="Administrators access their dispatch panel, route the report to appropriate departments, set targets, record internal remarks, and leave comments inside the complaint thread for student queries."
-            />
+            <div className="border border-charcoal rounded-[var(--radius-cards)] bg-graphite overflow-hidden transition-all duration-200">
+              <FaqItem
+                question="How do I submit a complaint?"
+                answer="Log in with your Student account credentials, select 'New Complaint' from your navigation panel, fill out the category details and exact campus location description, and click submit."
+              />
+            </div>
+            <div className="border border-charcoal rounded-[var(--radius-cards)] bg-graphite overflow-hidden transition-all duration-200">
+              <FaqItem
+                question="Can I upload images?"
+                answer="Yes. When submitting a complaint, students can attach photo logs of maintenance and technical problems. The images are stored securely and displayed for facilities supervisors to reference."
+              />
+            </div>
+            <div className="border border-charcoal rounded-[var(--radius-cards)] bg-graphite overflow-hidden transition-all duration-200">
+              <FaqItem
+                question="Can I track complaint status?"
+                answer="Yes! Students can select any complaint they own from their Dashboard to check live progress percentages moving from Pending -> In Progress -> Resolved."
+              />
+            </div>
+            <div className="border border-charcoal rounded-[var(--radius-cards)] bg-graphite overflow-hidden transition-all duration-200">
+              <FaqItem
+                question="How does the admin respond?"
+                answer="Administrators access their dispatch panel, route the report to appropriate departments, set targets, record internal remarks, and leave comments inside the complaint thread for student queries."
+              />
+            </div>
           </div>
         </div>
       </section>
 
-      {/* 9. CALL TO ACTION */}
-      <section className="py-16 sm:py-20 bg-gradient-to-br from-blue-700 to-indigo-900 text-white relative">
-        <div className="mx-auto max-w-5xl px-4 text-center sm:px-6 lg:px-8 space-y-6">
-          <h2 className="text-3xl font-extrabold tracking-tight sm:text-5xl leading-tight">
-            Ready to Improve Campus Communication?
+      {/* 10. CALL TO ACTION */}
+      <section className="py-20 bg-obsidian text-fog relative border-t border-charcoal/40 overflow-hidden">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-pilot-gold/5 opacity-20 blur-[80px] pointer-events-none rounded-full" />
+        <div className="relative mx-auto max-w-5xl px-4 text-center sm:px-6 lg:px-8 space-y-6">
+          <h2 className="text-3xl font-light tracking-[-0.04em] sm:text-5xl leading-tight font-whyte">
+            Improve Campus Operations Today
           </h2>
-          <p className="text-slate-200 text-sm max-w-xl mx-auto leading-relaxed">
+          <p className="text-pebble text-sm max-w-xl mx-auto leading-relaxed">
             Create an account or login to start tracking, managing, and resolving campus complaints on a unified portal.
           </p>
           <div className="flex flex-wrap justify-center gap-3 pt-2">
             <Link
               to="/register"
-              className="inline-flex h-12 items-center justify-center rounded-xl bg-white text-blue-600 hover:bg-slate-50 px-6 text-sm font-bold shadow-md hover:scale-[1.02] active:scale-[0.98] transition cursor-pointer"
+              className="inline-flex h-11 items-center justify-center rounded-[var(--radius-buttons)] bg-pilot-gold text-obsidian px-6 text-sm font-medium shadow-sm hover:scale-[1.02] active:scale-[0.98] transition cursor-pointer border-transparent"
             >
               Register Now
             </Link>
             <Link
               to="/login"
-              className="inline-flex h-12 items-center justify-center rounded-xl border border-white/20 bg-white/10 hover:bg-white/20 px-6 text-sm font-bold shadow-sm hover:scale-[1.02] active:scale-[0.98] transition cursor-pointer"
+              className="inline-flex h-11 items-center justify-center rounded-[var(--radius-buttons)] border border-slate bg-transparent text-fog px-6 text-sm font-normal hover:border-ash hover:bg-slate/10 hover:scale-[1.02] active:scale-[0.98] transition cursor-pointer"
             >
               Login
             </Link>
@@ -711,37 +746,37 @@ function LandingPage() {
         </div>
       </section>
 
-      {/* 10. FOOTER */}
-      <footer id="contact" className="bg-slate-900 border-t border-slate-800 text-slate-400 py-16">
+      {/* 11. FOOTER */}
+      <footer id="contact" className="bg-obsidian border-t border-charcoal/40 text-ash py-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-8">
           
           <div className="space-y-4">
-            <div className="flex items-center gap-2 text-white">
-              <div className="h-7 w-7 rounded-lg bg-blue-600 flex items-center justify-center font-bold">
+            <div className="flex items-center gap-2 text-fog">
+              <div className="h-7 w-7 rounded-lg bg-pilot-gold flex items-center justify-center font-bold text-obsidian shadow-[0_0_8px_rgba(202,177,106,0.15)]">
                 C
               </div>
-              <span className="text-sm font-bold tracking-tight">CCMS</span>
+              <span className="text-sm font-medium tracking-tight font-whyte">CCMS</span>
             </div>
-            <p className="text-xs text-slate-500 leading-relaxed">
-              Designed with ❤️ for Campus Complaint Management. Efficiently routing issues straight to resolutions.
+            <p className="text-xs text-pebble leading-relaxed">
+              Designed for Campus Complaint Management. Efficiently routing issues straight to resolutions.
             </p>
           </div>
 
           <div>
-            <h4 className="text-xs font-bold uppercase tracking-wider text-white mb-4">Quick Links</h4>
+            <h4 className="text-[10px] font-semibold uppercase tracking-[0.08em] text-fog mb-4 font-circularxxmono">Quick Links</h4>
             <ul className="space-y-2 text-xs">
               <li>
-                <button onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} className="hover:text-white transition cursor-pointer">
+                <button onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} className="hover:text-pilot-gold transition cursor-pointer bg-transparent border-0 p-0 text-left">
                   Home
                 </button>
               </li>
               <li>
-                <button onClick={() => scrollToSection("features")} className="hover:text-white transition cursor-pointer">
+                <button onClick={() => scrollToSection("features")} className="hover:text-pilot-gold transition cursor-pointer bg-transparent border-0 p-0 text-left">
                   Features
                 </button>
               </li>
               <li>
-                <button onClick={() => scrollToSection("about")} className="hover:text-white transition cursor-pointer">
+                <button onClick={() => scrollToSection("about")} className="hover:text-pilot-gold transition cursor-pointer bg-transparent border-0 p-0 text-left">
                   About
                 </button>
               </li>
@@ -749,8 +784,8 @@ function LandingPage() {
           </div>
 
           <div>
-            <h4 className="text-xs font-bold uppercase tracking-wider text-white mb-4">Features</h4>
-            <ul className="space-y-2 text-xs">
+            <h4 className="text-[10px] font-semibold uppercase tracking-[0.08em] text-fog mb-4 font-circularxxmono">Features</h4>
+            <ul className="space-y-2 text-xs text-pebble">
               <li>Real-time Progress</li>
               <li>Secure Verification</li>
               <li>Remarks & Timeline Logs</li>
@@ -759,8 +794,8 @@ function LandingPage() {
           </div>
 
           <div>
-            <h4 className="text-xs font-bold uppercase tracking-wider text-white mb-4">Contact & Support</h4>
-            <ul className="space-y-2 text-xs">
+            <h4 className="text-[10px] font-semibold uppercase tracking-[0.08em] text-fog mb-4 font-circularxxmono">Contact & Support</h4>
+            <ul className="space-y-2 text-xs text-pebble">
               <li>ccms-support@campus.edu</li>
               <li>Office of Maintenance & Infrastructure</li>
               <li className="pt-2">
@@ -768,9 +803,9 @@ function LandingPage() {
                   href="https://github.com"
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex items-center gap-1.5 hover:text-white transition"
+                  className="inline-flex items-center gap-1.5 hover:text-pilot-gold transition text-mist"
                 >
-                  <FaGithub size={14} /> GitHub Project
+                  <FaGithub size={12} /> GitHub Project
                 </a>
               </li>
             </ul>
@@ -778,9 +813,9 @@ function LandingPage() {
 
         </div>
 
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mt-12 pt-6 border-t border-slate-800 flex justify-between items-center text-[10px] text-slate-500">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 mt-12 pt-6 border-t border-charcoal/20 flex justify-between items-center text-[10px] text-stone">
           <span>&copy; {new Date().getFullYear()} CCMS. All rights reserved.</span>
-          <span>Designed with ❤️ for Campus Complaint Management</span>
+          <span>Designed for Campus Complaint Management</span>
         </div>
       </footer>
     </div>

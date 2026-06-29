@@ -35,23 +35,23 @@ function ComplaintList() {
     fetchComplaints();
   }, []);
 
-const handleDelete = async (id) => {
-  const confirmDelete = window.confirm(
-    "Are you sure you want to delete this complaint?"
-  );
-
-  if (!confirmDelete) return;
-
-  try {
-    await api.delete(`/complaints/${id}`);
-
-    setComplaints((prev) =>
-      prev.filter((complaint) => complaint._id !== id)
+  const handleDelete = async (id) => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this complaint?"
     );
-  } catch (error) {
-    console.error(error);
-  }
-};
+
+    if (!confirmDelete) return;
+
+    try {
+      await api.delete(`/complaints/${id}`);
+
+      setComplaints((prev) =>
+        prev.filter((complaint) => complaint._id !== id)
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <PageShell>
@@ -74,56 +74,56 @@ const handleDelete = async (id) => {
         ) : complaints.length === 0 ? (
           <EmptyState description="Submit your first complaint to get started." />
         ) : (
-        <DataTable>
-          <TableHead>
-            <tr>
-              <Th>Title</Th>
-              <Th>Category</Th>
-              <Th>Status</Th>
-              <Th>Date</Th>
-              <Th>Action</Th>
-            </tr>
-          </TableHead>
-          <tbody>
-            {complaints.map((complaint) => (
-              <TableRow key={complaint._id}>
-                <Td className="font-medium text-slate-900">{complaint.title}</Td>
-                <Td>{complaint.category}</Td>
-                <Td>
-                  <StatusBadge status={complaint.status} />
-                </Td>
-                <Td>
-  {new Date(complaint.createdAt).toLocaleDateString()}
-</Td>
-               <Td>
-  <div className="flex items-center gap-4">
-    <Link
-      to={`/student/complaint/${complaint._id}`}
-      className="font-semibold text-blue-600 hover:underline"
-    >
-      View
-    </Link>
+          <DataTable>
+            <TableHead>
+              <tr>
+                <Th>Title</Th>
+                <Th>Category</Th>
+                <Th>Status</Th>
+                <Th>Date</Th>
+                <Th>Action</Th>
+              </tr>
+            </TableHead>
+            <tbody>
+              {complaints.map((complaint) => (
+                <TableRow key={complaint._id}>
+                  <Td className="font-semibold text-fog">{complaint.title}</Td>
+                  <Td>{complaint.category}</Td>
+                  <Td>
+                    <StatusBadge status={complaint.status} />
+                  </Td>
+                  <Td className="font-circularxxmono text-xs text-pebble">
+                    {new Date(complaint.createdAt).toLocaleDateString()}
+                  </Td>
+                  <Td>
+                    <div className="flex items-center gap-4 text-xs font-semibold font-circularxxmono tracking-wide">
+                      <Link
+                        to={`/student/complaint/${complaint._id}`}
+                        className="text-pilot-gold hover:underline"
+                      >
+                        View
+                      </Link>
 
-    <Link
-      to={`/student/edit-complaint/${complaint._id}`}
-      className="font-semibold text-green-600 hover:underline"
-    >
-      Edit
-    </Link>
+                      <Link
+                        to={`/student/edit-complaint/${complaint._id}`}
+                        className="text-mist hover:text-fog transition hover:underline"
+                      >
+                        Edit
+                      </Link>
 
-    <button
-      type="button"
-      onClick={() => handleDelete(complaint._id)}
-      className="font-semibold text-red-600 hover:underline"
-    >
-      Delete
-    </button>
-  </div>
-</Td>
-              </TableRow>
-            ))}
-          </tbody>
-        </DataTable>
+                      <button
+                        type="button"
+                        onClick={() => handleDelete(complaint._id)}
+                        className="text-signal-red hover:underline cursor-pointer bg-transparent border-0 p-0"
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </Td>
+                </TableRow>
+              ))}
+            </tbody>
+          </DataTable>
         )}
       </TableCard>
     </PageShell>

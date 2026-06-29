@@ -252,7 +252,8 @@ function StudentDashboard() {
     { name: "Resolved", value: stats.resolved },
   ].filter(item => item.value > 0);
 
-  const COLORS = ["#F59E0B", "#3B82F6", "#10B981"];
+  // Wonder Theme Colors: Stone (Pending), Pilot Gold (In Progress), Mist (Resolved)
+  const COLORS = ["#57534e", "#cab16a", "#d6d3d1"];
 
   // Helper to calculate progress percent
   const getProgressDetails = (status) => {
@@ -278,12 +279,12 @@ function StudentDashboard() {
         description="Track your complaints, browse resolutions, and request maintenance."
         actions={
           <div className="flex gap-2">
-            <ButtonLink to="/student/complaint" className="hover:scale-102 transition shadow-md bg-gradient-to-r from-blue-600 to-indigo-600 border-none">
+            <ButtonLink to="/student/complaint" className="shadow-md">
               <FaPlusCircle className="mr-2" /> New Complaint
             </ButtonLink>
             <button 
               onClick={fetchDashboardData}
-              className="p-3 border border-slate-200 bg-white rounded-xl text-slate-600 hover:bg-slate-50 transition hover:scale-102 flex items-center justify-center cursor-pointer shadow-sm"
+              className="p-3 border border-lavender-mist bg-transparent rounded-[var(--radius-buttons)] text-silver-smoke hover:border-laser-violet hover:bg-lavender-mist/10 transition hover:scale-102 flex items-center justify-center cursor-pointer"
               title="Refresh feed"
             >
               <FaSyncAlt />
@@ -345,12 +346,12 @@ function StudentDashboard() {
             </div>
 
             {/* Doughnut Chart */}
-            <Card className="p-6 flex flex-col justify-between hover:shadow-md transition">
-              <h2 className="text-base font-bold text-slate-800 mb-2">Complaint Status</h2>
+            <Card className="p-6 flex flex-col justify-between hover:shadow-subtle transition">
+              <h2 className="text-sm font-semibold tracking-[0.08em] text-fog uppercase font-circularxx mb-2">Complaint Status</h2>
               
               {chartData.length === 0 ? (
                 <div className="flex-1 flex flex-col justify-center items-center py-6">
-                  <p className="text-sm text-slate-400 italic">No complaint data to display</p>
+                  <p className="text-xs text-pebble italic">No complaint data to display</p>
                 </div>
               ) : (
                 <div className="flex-1 flex items-center justify-center relative min-h-[160px]">
@@ -385,17 +386,17 @@ function StudentDashboard() {
                   
                   {/* Center Text */}
                   <div className="absolute inset-0 flex flex-col justify-center items-center pointer-events-none">
-                    <span className="text-2xl font-extrabold text-slate-800">{stats.total}</span>
-                    <span className="text-[10px] uppercase font-bold text-slate-400">Total</span>
+                    <span className="text-2xl font-light text-fog font-whyte">{stats.total}</span>
+                    <span className="text-[9px] uppercase font-semibold font-circularxxmono tracking-[0.05em] text-pebble">Total</span>
                   </div>
                 </div>
               )}
               
               {/* Legend Indicators */}
-              <div className="flex justify-center gap-4 text-xs font-semibold text-slate-600 mt-2">
-                <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-[#F59E0B]"></span>Pending ({stats.pending})</span>
-                <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-[#3B82F6]"></span>Active ({stats.inProgress})</span>
-                <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-[#10B981]"></span>Resolved ({stats.resolved})</span>
+              <div className="flex flex-wrap justify-center gap-4 text-[11px] font-medium text-mist mt-2 font-circularxxmono">
+                <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-[#57534e]"></span>Pending ({stats.pending})</span>
+                <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-[#cab16a]"></span>Active ({stats.inProgress})</span>
+                <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-[#d6d3d1]"></span>Resolved ({stats.resolved})</span>
               </div>
             </Card>
           </div>
@@ -405,32 +406,32 @@ function StudentDashboard() {
             
             {/* Recent Activity Card (Timeline) */}
             <Card className="p-6 hover:shadow-md transition">
-              <h2 className="text-base font-bold text-slate-800 mb-4 flex items-center gap-2">
+              <h2 className="text-sm font-semibold tracking-[0.08em] text-paper-white uppercase font-uncut-sans mb-4">
                 Recent Activity
               </h2>
               
               {recentActivity.length === 0 ? (
                 <div className="h-48 flex flex-col justify-center items-center text-center">
-                  <p className="text-slate-400 text-sm">No recent activities logged.</p>
-                  <p className="text-xs text-slate-400 mt-1">Activities appear as updates happen.</p>
+                  <p className="text-ash-wisp text-sm font-medium">No recent activities logged.</p>
+                  <p className="text-xs text-ash-wisp mt-1">Activities appear as updates happen.</p>
                 </div>
               ) : (
-                <div className="relative pl-4 border-l border-slate-100 space-y-4">
+                <div className="relative pl-4 border-l border-charcoal/40 space-y-4 font-circularxx">
                   {recentActivity.map((activity, index) => (
                     <div key={index} className="relative group">
                       {/* Bullet point */}
-                      <span className={`absolute -left-[21px] top-1.5 h-2.5 w-2.5 rounded-full border-2 border-white shadow-sm ${
-                        activity.color === "blue" ? "bg-blue-500" :
-                        activity.color === "amber" ? "bg-amber-500" :
-                        activity.color === "green" ? "bg-green-500" :
-                        activity.color === "purple" ? "bg-purple-500" : "bg-slate-400"
+                      <span className={`absolute -left-[21px] top-1.5 h-2.5 w-2.5 rounded-full border-2 border-graphite shadow-sm ${
+                        activity.color === "blue" ? "bg-pilot-gold" :
+                        activity.color === "amber" ? "bg-mist" :
+                        activity.color === "green" ? "bg-pilot-gold" :
+                        activity.color === "purple" ? "bg-pilot-gold" : "bg-stone"
                       }`} />
                       
                       <div className="flex justify-between items-baseline gap-2">
-                        <p className="text-sm font-medium text-slate-700 leading-tight">
+                        <p className="text-sm font-medium text-mist leading-tight">
                           {activity.message}
                         </p>
-                        <span className="text-[10px] text-slate-400 shrink-0">
+                        <span className="text-[10px] text-ash-wisp shrink-0 font-martian">
                           {new Date(activity.time).toLocaleDateString("en-GB", {
                             day: "numeric",
                             month: "short"
@@ -445,37 +446,37 @@ function StudentDashboard() {
 
             {/* Today's Notifications Card */}
             <Card className="p-6 hover:shadow-md transition">
-              <h2 className="text-base font-bold text-slate-800 mb-4 flex items-center gap-2">
-                <FaBell className="text-slate-400" /> Notifications
+              <h2 className="text-sm font-semibold tracking-[0.08em] text-paper-white uppercase font-uncut-sans mb-4 flex items-center gap-2">
+                <FaBell className="text-ash-wisp" /> Notifications
               </h2>
               
               {notifications.length === 0 ? (
                 <div className="h-48 flex flex-col justify-center items-center text-center">
-                  <div className="h-10 w-10 bg-slate-50 rounded-full flex items-center justify-center text-slate-300 mb-3">
-                    <FaBell size={18} />
+                  <div className="h-10 w-10 bg-carbon-ink rounded-full flex items-center justify-center text-ash-wisp mb-3 border border-lavender-mist/40">
+                    <FaBell size={16} />
                   </div>
-                  <p className="text-sm font-semibold text-slate-800">You're all caught up!</p>
-                  <p className="text-xs text-slate-500 mt-1">No notifications for today.</p>
+                  <p className="text-sm font-semibold text-paper-white font-uncut-sans">You're all caught up!</p>
+                  <p className="text-xs text-ash-wisp mt-1">No notifications for today.</p>
                 </div>
               ) : (
                 <div className="space-y-3">
                   {notifications.map((notif, index) => (
-                    <div key={index} className="p-3 bg-slate-50/60 hover:bg-slate-50 rounded-xl border border-slate-100 flex items-start gap-3 transition">
+                    <div key={index} className="p-3 bg-charcoal/30 hover:bg-charcoal/60 rounded-[var(--radius-inputs)] border border-charcoal/50 flex items-start gap-3 transition">
                       <span className={`h-2.5 w-2.5 rounded-full mt-1.5 shrink-0 ${
-                        notif.type === "reply" ? "bg-purple-500 animate-pulse" :
-                        notif.type === "status" ? "bg-blue-500" : "bg-emerald-500"
+                        notif.type === "reply" ? "bg-pilot-gold animate-pulse" :
+                        notif.type === "status" ? "bg-pilot-gold" : "bg-pilot-gold"
                       }`} />
                       <div className="flex-1 min-w-0">
                         <div className="flex justify-between items-baseline gap-2">
-                          <p className="text-xs font-bold text-slate-800">{notif.title}</p>
-                          <span className="text-[9px] text-slate-400 font-medium">
+                          <p className="text-xs font-semibold text-fog">{notif.title}</p>
+                          <span className="text-[9px] text-pebble font-medium font-circularxxmono">
                             {new Date(notif.date).toLocaleDateString()}
                           </span>
                         </div>
-                        <p className="text-xs text-slate-600 mt-0.5 truncate">{notif.message}</p>
+                        <p className="text-xs text-mist mt-0.5 truncate">{notif.message}</p>
                         <Link 
                           to={`/student/complaint/${notif.complaintId}`}
-                          className="text-[10px] text-blue-600 font-semibold hover:underline mt-1.5 inline-block"
+                          className="text-[10px] text-pilot-gold font-medium hover:underline mt-1.5 inline-block"
                         >
                           View Details &rarr;
                         </Link>
@@ -491,30 +492,30 @@ function StudentDashboard() {
           <div className="grid gap-6 lg:grid-cols-3">
             
             {/* Recent Replies Card */}
-            <Card className="p-6 hover:shadow-md transition lg:col-span-1">
-              <h2 className="text-base font-bold text-slate-800 mb-4 flex items-center gap-2">
-                <FaCommentAlt className="text-slate-400" /> Recent Replies
+            <Card className="p-6 hover:shadow-subtle transition lg:col-span-1">
+              <h2 className="text-sm font-semibold tracking-[0.08em] text-fog uppercase font-circularxx mb-4 flex items-center gap-2">
+                <FaCommentAlt className="text-pebble" /> Recent Replies
               </h2>
 
               {recentReplies.length === 0 ? (
                 <div className="h-44 flex flex-col justify-center items-center text-center">
-                  <p className="text-slate-400 text-sm italic">No replies yet.</p>
-                  <p className="text-xs text-slate-400 mt-1">Admin messages will show up here.</p>
+                  <p className="text-pebble text-sm italic font-medium">No replies yet.</p>
+                  <p className="text-xs text-pebble mt-1">Admin messages will show up here.</p>
                 </div>
               ) : (
                 <div className="space-y-3.5">
                   {recentReplies.map((reply) => (
-                    <div key={reply._id} className="border-b border-slate-100 last:border-0 pb-3 last:pb-0">
+                    <div key={reply._id} className="border-b border-charcoal/40 last:border-0 pb-3 last:pb-0">
                       <div className="flex justify-between items-baseline gap-2">
-                        <span className="text-xs font-bold text-slate-700">{reply.author}</span>
-                        <span className="text-[9px] text-slate-400">
+                        <span className="text-xs font-bold text-mist">{reply.author}</span>
+                        <span className="text-[9px] text-pebble font-circularxxmono">
                           {new Date(reply.createdAt).toLocaleDateString()}
                         </span>
                       </div>
-                      <p className="text-xs text-slate-500 mt-0.5 line-clamp-2">
+                      <p className="text-xs text-mist mt-0.5 line-clamp-2 leading-relaxed font-circularxx">
                         {reply.message}
                       </p>
-                      <span className="text-[10px] text-blue-500 font-medium block mt-1">
+                      <span className="text-[10px] text-pilot-gold font-medium block mt-1 font-circularxxmono">
                         on: <span className="italic">{reply.complaintTitle}</span>
                       </span>
                     </div>
@@ -526,88 +527,88 @@ function StudentDashboard() {
             {/* Quick Actions & Tips Card */}
             <div className="space-y-4 lg:col-span-1">
               {/* Quick Actions */}
-              <Card className="p-5 hover:shadow-md transition">
-                <h2 className="text-sm font-bold text-slate-800 mb-3">Quick Actions</h2>
+              <Card className="p-5 hover:shadow-subtle transition">
+                <h2 className="text-xs font-bold uppercase tracking-[0.08em] text-pebble mb-3 font-circularxx">Quick Actions</h2>
                 <div className="grid grid-cols-3 gap-2">
                   <Link 
                     to="/student/complaint" 
-                    className="flex flex-col items-center justify-center p-3 rounded-xl bg-slate-50 hover:bg-blue-50 hover:text-blue-600 border border-slate-100 hover:border-blue-100 text-slate-700 text-xs font-semibold text-center transition hover:scale-105"
+                    className="flex flex-col items-center justify-center p-3 rounded-[var(--radius-inputs)] bg-charcoal border border-charcoal hover:bg-charcoal/50 text-mist hover:text-fog text-xs font-medium text-center transition hover:scale-105"
                   >
-                    <FaPlusCircle className="mb-1.5 text-blue-500" size={16} />
+                    <FaPlusCircle className="mb-1.5 text-pilot-gold" size={16} />
                     <span>New Complaint</span>
                   </Link>
                   
                   <Link 
                     to="/student/complaints" 
-                    className="flex flex-col items-center justify-center p-3 rounded-xl bg-slate-50 hover:bg-indigo-50 hover:text-indigo-600 border border-slate-100 hover:border-indigo-100 text-slate-700 text-xs font-semibold text-center transition hover:scale-105"
+                    className="flex flex-col items-center justify-center p-3 rounded-[var(--radius-inputs)] bg-charcoal border border-charcoal hover:bg-charcoal/50 text-mist hover:text-fog text-xs font-medium text-center transition hover:scale-105"
                   >
-                    <FaListUl className="mb-1.5 text-indigo-500" size={16} />
+                    <FaListUl className="mb-1.5 text-pilot-gold" size={16} />
                     <span>My Feed</span>
                   </Link>
                   
                   <Link 
                     to="/profile" 
-                    className="flex flex-col items-center justify-center p-3 rounded-xl bg-slate-50 hover:bg-emerald-50 hover:text-emerald-600 border border-slate-100 hover:border-emerald-100 text-slate-700 text-xs font-semibold text-center transition hover:scale-105"
+                    className="flex flex-col items-center justify-center p-3 rounded-[var(--radius-inputs)] bg-charcoal border border-charcoal hover:bg-charcoal/50 text-mist hover:text-fog text-xs font-medium text-center transition hover:scale-105"
                   >
-                    <FaUser className="mb-1.5 text-emerald-500" size={16} />
+                    <FaUser className="mb-1.5 text-mist" size={16} />
                     <span>Profile</span>
                   </Link>
                 </div>
               </Card>
 
               {/* Tips Card */}
-              <Card className="p-5 bg-gradient-to-br from-indigo-900 to-slate-900 text-white shadow-lg overflow-hidden relative min-h-[110px]">
-                <div className="absolute top-0 right-0 p-3 opacity-10">
+              <Card className="p-5 bg-gradient-to-br from-charcoal to-graphite border border-charcoal text-fog shadow-subtle overflow-hidden relative min-h-[110px]">
+                <div className="absolute top-0 right-0 p-3 opacity-10 text-pilot-gold">
                   <FaLightbulb size={48} />
                 </div>
                 
-                <div className="flex justify-between items-center mb-2">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-indigo-200 flex items-center gap-1.5">
+                <div className="flex justify-between items-center mb-2 relative z-10 font-circularxx">
+                  <span className="text-[10px] font-bold uppercase tracking-[0.08em] text-pilot-gold flex items-center gap-1.5 font-circularxxmono">
                     <FaLightbulb /> Support Tip
                   </span>
                   
-                  <div className="flex gap-1.5 text-[10px] text-indigo-200">
-                    <button onClick={handlePrevTip} className="hover:text-white transition cursor-pointer">
+                  <div className="flex gap-1.5 text-[10px] text-mist font-circularxxmono">
+                    <button onClick={handlePrevTip} className="hover:text-fog transition cursor-pointer bg-transparent border-0 p-0">
                       <FaChevronLeft />
                     </button>
                     <span>{tipIndex + 1}/{tips.length}</span>
-                    <button onClick={handleNextTip} className="hover:text-white transition cursor-pointer">
+                    <button onClick={handleNextTip} className="hover:text-fog transition cursor-pointer bg-transparent border-0 p-0">
                       <FaChevronRight />
                     </button>
                   </div>
                 </div>
 
-                <p className="text-xs leading-relaxed text-indigo-100 select-none">
+                <p className="text-xs leading-relaxed text-mist select-none relative z-10 font-medium font-circularxx">
                   {tips[tipIndex]}
                 </p>
               </Card>
             </div>
 
             {/* Complaint Progress Tracker Card */}
-            <Card className="p-6 hover:shadow-md transition lg:col-span-1 flex flex-col justify-between">
+            <Card className="p-6 hover:shadow-subtle transition lg:col-span-1 flex flex-col justify-between">
               <div>
-                <h2 className="text-base font-bold text-slate-800 mb-2 flex items-center gap-2">
-                  <FaInfoCircle className="text-slate-400" /> Complaint Progress
+                <h2 className="text-sm font-semibold tracking-[0.08em] text-fog uppercase font-circularxx mb-2 flex items-center gap-2">
+                  <FaInfoCircle className="text-pebble" /> Complaint Progress
                 </h2>
                 
                 {complaints.length === 0 ? (
                   <div className="h-44 flex flex-col justify-center items-center text-center">
-                    <p className="text-slate-400 text-sm italic">No active complaints yet.</p>
+                    <p className="text-pebble text-sm italic font-medium">No active complaints yet.</p>
                   </div>
                 ) : (
                   <div className="space-y-4">
                     {/* Selector */}
                     <div>
-                      <label className="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">
+                      <label className="block text-[10px] font-bold uppercase tracking-[0.08em] text-pebble mb-1 font-circularxxmono">
                         Select Complaint
                       </label>
                       <select 
                         value={selectedComplaintId} 
                         onChange={handleComplaintChange}
-                        className="w-full text-xs font-semibold rounded-lg border border-slate-200 bg-white p-1.5 focus:outline-none focus:border-blue-500 truncate"
+                        className="w-full text-xs font-semibold rounded-[var(--radius-inputs)] border border-charcoal bg-charcoal p-1.5 focus:outline-none focus:border-slate text-fog truncate font-circularxx"
                       >
                         {complaints.map((c) => (
-                          <option key={c._id} value={c._id}>
+                          <option key={c._id} value={c._id} className="bg-graphite text-fog font-circularxx">
                             {c.title}
                           </option>
                         ))}
@@ -615,33 +616,33 @@ function StudentDashboard() {
                     </div>
 
                     {selectedComplaint && (
-                      <div className="pt-2 space-y-4">
+                      <div className="pt-2 space-y-4 font-circularxx">
                         <div className="flex justify-between items-center text-xs">
-                          <span className="font-bold text-slate-700">Completion Estimate</span>
-                          <span className="font-semibold text-slate-500">
+                          <span className="font-bold text-mist">Completion Estimate</span>
+                          <span className="font-semibold text-pilot-gold font-circularxxmono">
                             {selectedProgress.percent}% Done
                           </span>
                         </div>
 
                         {/* Progress Bar Line */}
                         <div className="relative pt-1">
-                          <div className="overflow-hidden h-2.5 text-xs flex rounded-full bg-slate-100">
+                          <div className="overflow-hidden h-2 text-xs flex rounded-full bg-obsidian border border-charcoal/40">
                             <div 
                               style={{ width: `${selectedProgress.percent}%` }}
-                              className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-blue-500 transition-all duration-500 ease-out"
+                              className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-pilot-gold transition-all duration-500 ease-out"
                             />
                           </div>
                         </div>
 
                         {/* Steps timeline */}
-                        <div className="flex justify-between text-[10px] font-bold text-slate-400">
-                          <span className={`${selectedProgress.step >= 1 ? "text-blue-600" : ""}`}>
+                        <div className="flex justify-between text-[10px] font-bold text-pebble font-circularxxmono">
+                          <span className={`${selectedProgress.step >= 1 ? "text-pilot-gold" : ""}`}>
                             Pending
                           </span>
-                          <span className={`${selectedProgress.step >= 2 ? "text-amber-600" : ""}`}>
+                          <span className={`${selectedProgress.step >= 2 ? "text-pilot-gold font-medium" : ""}`}>
                             In Progress
                           </span>
-                          <span className={`${selectedProgress.step >= 3 ? "text-emerald-600" : ""}`}>
+                          <span className={`${selectedProgress.step >= 3 ? "text-pilot-gold" : ""}`}>
                             Resolved
                           </span>
                         </div>
@@ -652,14 +653,14 @@ function StudentDashboard() {
               </div>
 
               {selectedComplaint && (
-                <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
+                <div className="mt-4 pt-3 border-t border-charcoal/40 flex items-center justify-between font-circularxx">
                   <div className="flex items-center gap-1.5">
-                    <span className="text-[10px] text-slate-400 uppercase font-bold">Status:</span>
+                    <span className="text-[10px] text-pebble uppercase font-bold font-circularxxmono">Status:</span>
                     <StatusBadge status={selectedComplaint.status} />
                   </div>
                   <Link 
                     to={`/student/complaint/${selectedComplaint._id}`}
-                    className="text-[10px] font-bold text-blue-600 hover:underline"
+                    className="text-[10px] font-bold text-pilot-gold hover:underline font-circularxxmono"
                   >
                     View Thread &rarr;
                   </Link>
