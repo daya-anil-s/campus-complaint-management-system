@@ -1,22 +1,13 @@
 import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import api from "../../services/api";
 import {
   FaCheckCircle,
-  FaClipboardList,
   FaClock,
-  FaSearch,
-  FaLightbulb,
-  FaChevronLeft,
-  FaChevronRight,
   FaPlusCircle,
-  FaUser,
   FaListUl,
   FaBell,
-  FaSyncAlt,
-  FaCommentAlt,
   FaWrench,
-  FaInfoCircle
 } from "react-icons/fa";
 
 import {
@@ -25,7 +16,6 @@ import {
   PageHeader,
   PageShell,
   StatCard,
-  StatusBadge,
 } from "../../components/ui";
 
 import {
@@ -43,7 +33,6 @@ function StudentDashboard() {
   const user = getCurrentUser();
 
   const [isLoading, setIsLoading] = useState(true);
-  const [complaints, setComplaints] = useState([]);
   const [stats, setStats] = useState({
     total: 0,
     pending: 0,
@@ -53,54 +42,13 @@ function StudentDashboard() {
 
   const [recentActivity, setRecentActivity] = useState([]);
   const [notifications, setNotifications] = useState([]);
-  const [recentReplies, setRecentReplies] = useState([]);
-  
-  // Progress tracker selection
-  const [selectedComplaintId, setSelectedComplaintId] = useState("");
-  const [selectedComplaint, setSelectedComplaint] = useState(null);
 
-  // Tips carousel state
-  const tips = [
-    "Upload images for faster resolution.",
-    "Provide accurate location details when submitting.",
-    "Use comments for additional updates instead of submitting new complaints.",
-    "Check estimated completion dates regularly for progress updates."
-  ];
-  const [tipIndex, setTipIndex] = useState(0);
-
-  // Auto rotate tips
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setTipIndex((prev) => (prev + 1) % tips.length);
-    }, 6000);
-    return () => clearInterval(interval);
-  }, []);
-
-  const handleNextTip = () => {
-    setTipIndex((prev) => (prev + 1) % tips.length);
-  };
-
-  const handlePrevTip = () => {
-    setTipIndex((prev) => (prev - 1 + tips.length) % tips.length);
-  };
-
-  useEffect(() => {
-    fetchDashboardData();
-  }, []);
-
-  const fetchDashboardData = async () => {
+  const fetchDashboardData = useCallback(async () => {
     setIsLoading(true);
     try {
       // Fetch only logged in student complaints
       const complaintsRes = await api.get("/complaints/my");
       const fetchedComplaints = complaintsRes.data;
-      setComplaints(fetchedComplaints);
-
-      // Select first complaint for progress bar by default
-      if (fetchedComplaints.length > 0) {
-        setSelectedComplaintId(fetchedComplaints[0]._id);
-        setSelectedComplaint(fetchedComplaints[0]);
-      }
 
       // Compute statistics locally
       const computedStats = {
@@ -124,24 +72,6 @@ function StudentDashboard() {
       });
 
       const commentsResults = await Promise.all(commentsPromises);
-
-      // Compile Recent Admin Replies
-      const allAdminReplies = [];
-      commentsResults.forEach(({ title, comments }) => {
-        comments.forEach((comment) => {
-          if (comment.user?.role === "Admin") {
-            allAdminReplies.push({
-              _id: comment._id,
-              complaintTitle: title,
-              message: comment.message,
-              author: comment.user?.name || "Admin",
-              createdAt: new Date(comment.createdAt),
-            });
-          }
-        });
-      });
-      allAdminReplies.sort((a, b) => b.createdAt - a.createdAt);
-      setRecentReplies(allAdminReplies.slice(0, 3));
 
       // Compile Today's Notifications (alerts in the last 48h / recent status shifts)
       const compiledNotifications = [];
@@ -170,7 +100,7 @@ function StudentDashboard() {
         }
       });
 
-      commentsResults.forEach(({ title, comments, complaintId }) => {
+      commentsResults.forEach(({ comments, complaintId }) => {
         comments.forEach((comment) => {
           if (comment.user?.role === "Admin") {
             compiledNotifications.push({
@@ -228,22 +158,18 @@ function StudentDashboard() {
       });
 
       compiledActivities.sort((a, b) => b.time - a.time);
-      setRecentActivity(compiledActivities.slice(0, 4));
+      setRecentActivity(compiledActivities.slice(0, 5));
 
     } catch (error) {
       console.error(error);
     } finally {
       setIsLoading(false);
     }
-  };
+  }, []);
 
-  // Handle complaint selection for progress bar
-  const handleComplaintChange = (e) => {
-    const id = e.target.value;
-    setSelectedComplaintId(id);
-    const complaint = complaints.find((c) => c._id === id);
-    setSelectedComplaint(complaint || null);
-  };
+  useEffect(() => {
+    void Promise.resolve().then(fetchDashboardData);
+  }, [fetchDashboardData]);
 
   // Recharts custom colors
   const chartData = [
@@ -255,41 +181,22 @@ function StudentDashboard() {
   // Wonder Theme Colors: Stone (Pending), Pilot Gold (In Progress), Mist (Resolved)
   const COLORS = ["#57534e", "#cab16a", "#d6d3d1"];
 
-  // Helper to calculate progress percent
-  const getProgressDetails = (status) => {
-    switch (status) {
-      case "Pending":
-        return { percent: 33, step: 1 };
-      case "In Progress":
-        return { percent: 66, step: 2 };
-      case "Resolved":
-        return { percent: 100, step: 3 };
-      default:
-        return { percent: 0, step: 0 };
-    }
-  };
-
-  const selectedProgress = selectedComplaint ? getProgressDetails(selectedComplaint.status) : { percent: 0, step: 0 };
+  const formatShortDate = (date) =>
+    new Date(date).toLocaleDateString("en-GB", {
+      day: "numeric",
+      month: "short",
+    });
 
   return (
     <PageShell>
       <PageHeader
         eyebrow="Student Dashboard"
         title={user?.name ? `Welcome back, ${user.name}` : "Welcome back"}
-        description="Track your complaints, browse resolutions, and request maintenance."
+        description="A focused view of your complaint status, latest updates, and notifications."
         actions={
-          <div className="flex gap-2">
-            <ButtonLink to="/student/complaint" className="shadow-md">
-              <FaPlusCircle className="mr-2" /> New Complaint
-            </ButtonLink>
-            <button 
-              onClick={fetchDashboardData}
-              className="p-3 border border-lavender-mist bg-transparent rounded-[var(--radius-buttons)] text-silver-smoke hover:border-laser-violet hover:bg-lavender-mist/10 transition hover:scale-102 flex items-center justify-center cursor-pointer"
-              title="Refresh feed"
-            >
-              <FaSyncAlt />
-            </button>
-          </div>
+          <ButtonLink to="/student/complaint" className="h-12 px-6 shadow-md">
+            <FaPlusCircle className="mr-2" /> New Complaint
+          </ButtonLink>
         }
       />
 
@@ -309,53 +216,33 @@ function StudentDashboard() {
           </div>
         </div>
       ) : (
-        <div className="space-y-6">
-          
-          {/* TOP ROW: Statistics & Status Chart */}
-          <div className="grid gap-6 lg:grid-cols-3">
-            {/* Stat Cards */}
-            <div className="lg:col-span-2 grid gap-4 grid-cols-2">
-              <div className="hover:scale-[1.02] transition duration-200">
-                <StatCard
-                  icon={FaListUl}
-                  label="Total Complaints"
-                  value={stats.total}
-                />
-              </div>
-              <div className="hover:scale-[1.02] transition duration-200">
-                <StatCard
-                  icon={FaClock}
-                  label="Pending"
-                  value={stats.pending}
-                />
-              </div>
-              <div className="hover:scale-[1.02] transition duration-200">
-                <StatCard
-                  icon={FaWrench}
-                  label="In Progress"
-                  value={stats.inProgress}
-                />
-              </div>
-              <div className="hover:scale-[1.02] transition duration-200">
-                <StatCard
-                  icon={FaCheckCircle}
-                  label="Resolved"
-                  value={stats.resolved}
-                />
-              </div>
-            </div>
+        <div className="space-y-8">
+          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+            <StatCard icon={FaListUl} label="Total" value={stats.total} />
+            <StatCard icon={FaClock} label="Pending" value={stats.pending} />
+            <StatCard icon={FaWrench} label="In Progress" value={stats.inProgress} />
+            <StatCard icon={FaCheckCircle} label="Resolved" value={stats.resolved} />
+          </div>
 
-            {/* Doughnut Chart */}
-            <Card className="p-6 flex flex-col justify-between hover:shadow-subtle transition">
-              <h2 className="text-sm font-semibold tracking-[0.08em] text-fog uppercase font-circularxx mb-2">Complaint Status</h2>
-              
+          <div className="grid gap-6 lg:grid-cols-5">
+            <Card className="p-6 lg:col-span-2">
+              <div className="flex items-center justify-between gap-4">
+                <div>
+                  <h2 className="text-sm font-semibold uppercase tracking-[0.08em] text-fog">
+                    Complaint Status
+                  </h2>
+                  <p className="mt-1 text-xs text-pebble">Current distribution across your complaints.</p>
+                </div>
+              </div>
+
               {chartData.length === 0 ? (
-                <div className="flex-1 flex flex-col justify-center items-center py-6">
-                  <p className="text-xs text-pebble italic">No complaint data to display</p>
+                <div className="flex min-h-[260px] flex-col items-center justify-center text-center">
+                  <p className="text-sm font-medium text-mist">No complaint data to display.</p>
+                  <p className="mt-1 text-xs text-pebble">Submit a complaint to start tracking status.</p>
                 </div>
               ) : (
-                <div className="flex-1 flex items-center justify-center relative min-h-[160px]">
-                  <ResponsiveContainer width="100%" height={160}>
+                <div className="relative mt-5 flex min-h-[260px] items-center justify-center">
+                  <ResponsiveContainer width="100%" height={250}>
                     <PieChart>
                       <Pie
                         data={chartData}
@@ -363,13 +250,13 @@ function StudentDashboard() {
                         nameKey="name"
                         cx="50%"
                         cy="50%"
-                        innerRadius={50}
-                        outerRadius={70}
+                        innerRadius={72}
+                        outerRadius={100}
                         paddingAngle={4}
                       >
-                        {chartData.map((entry, index) => (
+                        {chartData.map((entry) => (
                           <Cell
-                            key={index}
+                            key={entry.name}
                             fill={
                               entry.name === "Pending"
                                 ? COLORS[0]
@@ -380,106 +267,75 @@ function StudentDashboard() {
                           />
                         ))}
                       </Pie>
-                      <Tooltip />
+                      <Tooltip
+                        contentStyle={{
+                          background: "#1c1917",
+                          border: "1px solid #292524",
+                          borderRadius: "8px",
+                          color: "#e5e7eb",
+                        }}
+                      />
                     </PieChart>
                   </ResponsiveContainer>
-                  
-                  {/* Center Text */}
-                  <div className="absolute inset-0 flex flex-col justify-center items-center pointer-events-none">
-                    <span className="text-2xl font-light text-fog font-whyte">{stats.total}</span>
-                    <span className="text-[9px] uppercase font-semibold font-circularxxmono tracking-[0.05em] text-pebble">Total</span>
+
+                  <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
+                    <span className="font-whyte text-4xl font-light text-fog">{stats.total}</span>
+                    <span className="font-circularxxmono text-[10px] font-semibold uppercase tracking-[0.08em] text-pebble">
+                      Total
+                    </span>
                   </div>
                 </div>
               )}
-              
-              {/* Legend Indicators */}
-              <div className="flex flex-wrap justify-center gap-4 text-[11px] font-medium text-mist mt-2 font-circularxxmono">
-                <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-[#57534e]"></span>Pending ({stats.pending})</span>
-                <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-[#cab16a]"></span>Active ({stats.inProgress})</span>
-                <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-full bg-[#d6d3d1]"></span>Resolved ({stats.resolved})</span>
+
+              <div className="mt-4 grid gap-2 text-[11px] font-medium text-mist sm:grid-cols-3">
+                <span className="flex items-center gap-2">
+                  <span className="h-2 w-2 rounded-full bg-[#57534e]" />
+                  Pending ({stats.pending})
+                </span>
+                <span className="flex items-center gap-2">
+                  <span className="h-2 w-2 rounded-full bg-[#cab16a]" />
+                  In Progress ({stats.inProgress})
+                </span>
+                <span className="flex items-center gap-2">
+                  <span className="h-2 w-2 rounded-full bg-[#d6d3d1]" />
+                  Resolved ({stats.resolved})
+                </span>
               </div>
             </Card>
-          </div>
 
-          {/* MIDDLE ROW: Recent Activity & Notifications */}
-          <div className="grid gap-6 md:grid-cols-2">
-            
-            {/* Recent Activity Card (Timeline) */}
-            <Card className="p-6 hover:shadow-md transition">
-              <h2 className="text-sm font-semibold tracking-[0.08em] text-paper-white uppercase font-uncut-sans mb-4">
-                Recent Activity
-              </h2>
-              
+            <Card className="p-6 lg:col-span-3">
+              <div className="mb-6 flex items-start justify-between gap-4">
+                <div>
+                  <h2 className="text-sm font-semibold uppercase tracking-[0.08em] text-fog">
+                    Recent Activity
+                  </h2>
+                  <p className="mt-1 text-xs text-pebble">Latest 5 complaint updates.</p>
+                </div>
+              </div>
+
               {recentActivity.length === 0 ? (
-                <div className="h-48 flex flex-col justify-center items-center text-center">
-                  <p className="text-ash-wisp text-sm font-medium">No recent activities logged.</p>
-                  <p className="text-xs text-ash-wisp mt-1">Activities appear as updates happen.</p>
+                <div className="flex min-h-[260px] flex-col items-center justify-center text-center">
+                  <p className="text-sm font-medium text-mist">No recent activity yet.</p>
+                  <p className="mt-1 text-xs text-pebble">Updates will appear here as complaints move forward.</p>
                 </div>
               ) : (
-                <div className="relative pl-4 border-l border-charcoal/40 space-y-4 font-circularxx">
+                <div className="relative space-y-5 border-l border-charcoal pl-5">
                   {recentActivity.map((activity, index) => (
-                    <div key={index} className="relative group">
-                      {/* Bullet point */}
-                      <span className={`absolute -left-[21px] top-1.5 h-2.5 w-2.5 rounded-full border-2 border-graphite shadow-sm ${
-                        activity.color === "blue" ? "bg-pilot-gold" :
-                        activity.color === "amber" ? "bg-mist" :
-                        activity.color === "green" ? "bg-pilot-gold" :
-                        activity.color === "purple" ? "bg-pilot-gold" : "bg-stone"
-                      }`} />
-                      
-                      <div className="flex justify-between items-baseline gap-2">
-                        <p className="text-sm font-medium text-mist leading-tight">
-                          {activity.message}
-                        </p>
-                        <span className="text-[10px] text-ash-wisp shrink-0 font-martian">
-                          {new Date(activity.time).toLocaleDateString("en-GB", {
-                            day: "numeric",
-                            month: "short"
-                          })}
+                    <div key={`${activity.type}-${activity.time}-${index}`} className="relative">
+                      <span
+                        className={`absolute -left-[26px] top-1.5 h-3 w-3 rounded-full border-2 border-graphite ${
+                          activity.color === "amber"
+                            ? "bg-mist"
+                            : activity.color === "slate"
+                            ? "bg-stone"
+                            : "bg-pilot-gold"
+                        }`}
+                      />
+                      <div className="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between">
+                        <p className="text-sm font-medium leading-6 text-mist">{activity.message}</p>
+                        <span className="shrink-0 font-circularxxmono text-[10px] uppercase tracking-[0.05em] text-pebble">
+                          {formatShortDate(activity.time)}
                         </span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </Card>
-
-            {/* Today's Notifications Card */}
-            <Card className="p-6 hover:shadow-md transition">
-              <h2 className="text-sm font-semibold tracking-[0.08em] text-paper-white uppercase font-uncut-sans mb-4 flex items-center gap-2">
-                <FaBell className="text-ash-wisp" /> Notifications
-              </h2>
-              
-              {notifications.length === 0 ? (
-                <div className="h-48 flex flex-col justify-center items-center text-center">
-                  <div className="h-10 w-10 bg-carbon-ink rounded-full flex items-center justify-center text-ash-wisp mb-3 border border-lavender-mist/40">
-                    <FaBell size={16} />
-                  </div>
-                  <p className="text-sm font-semibold text-paper-white font-uncut-sans">You're all caught up!</p>
-                  <p className="text-xs text-ash-wisp mt-1">No notifications for today.</p>
-                </div>
-              ) : (
-                <div className="space-y-3">
-                  {notifications.map((notif, index) => (
-                    <div key={index} className="p-3 bg-charcoal/30 hover:bg-charcoal/60 rounded-[var(--radius-inputs)] border border-charcoal/50 flex items-start gap-3 transition">
-                      <span className={`h-2.5 w-2.5 rounded-full mt-1.5 shrink-0 ${
-                        notif.type === "reply" ? "bg-pilot-gold animate-pulse" :
-                        notif.type === "status" ? "bg-pilot-gold" : "bg-pilot-gold"
-                      }`} />
-                      <div className="flex-1 min-w-0">
-                        <div className="flex justify-between items-baseline gap-2">
-                          <p className="text-xs font-semibold text-fog">{notif.title}</p>
-                          <span className="text-[9px] text-pebble font-medium font-circularxxmono">
-                            {new Date(notif.date).toLocaleDateString()}
-                          </span>
-                        </div>
-                        <p className="text-xs text-mist mt-0.5 truncate">{notif.message}</p>
-                        <Link 
-                          to={`/student/complaint/${notif.complaintId}`}
-                          className="text-[10px] text-pilot-gold font-medium hover:underline mt-1.5 inline-block"
-                        >
-                          View Details &rarr;
-                        </Link>
                       </div>
                     </div>
                   ))}
@@ -488,188 +344,49 @@ function StudentDashboard() {
             </Card>
           </div>
 
-          {/* BOTTOM ROW: Recent Replies, Quick Actions, Tips & Complaint Progress */}
-          <div className="grid gap-6 lg:grid-cols-3">
-            
-            {/* Recent Replies Card */}
-            <Card className="p-6 hover:shadow-subtle transition lg:col-span-1">
-              <h2 className="text-sm font-semibold tracking-[0.08em] text-fog uppercase font-circularxx mb-4 flex items-center gap-2">
-                <FaCommentAlt className="text-pebble" /> Recent Replies
-              </h2>
-
-              {recentReplies.length === 0 ? (
-                <div className="h-44 flex flex-col justify-center items-center text-center">
-                  <p className="text-pebble text-sm italic font-medium">No replies yet.</p>
-                  <p className="text-xs text-pebble mt-1">Admin messages will show up here.</p>
-                </div>
-              ) : (
-                <div className="space-y-3.5">
-                  {recentReplies.map((reply) => (
-                    <div key={reply._id} className="border-b border-charcoal/40 last:border-0 pb-3 last:pb-0">
-                      <div className="flex justify-between items-baseline gap-2">
-                        <span className="text-xs font-bold text-mist">{reply.author}</span>
-                        <span className="text-[9px] text-pebble font-circularxxmono">
-                          {new Date(reply.createdAt).toLocaleDateString()}
-                        </span>
-                      </div>
-                      <p className="text-xs text-mist mt-0.5 line-clamp-2 leading-relaxed font-circularxx">
-                        {reply.message}
-                      </p>
-                      <span className="text-[10px] text-pilot-gold font-medium block mt-1 font-circularxxmono">
-                        on: <span className="italic">{reply.complaintTitle}</span>
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </Card>
-
-            {/* Quick Actions & Tips Card */}
-            <div className="space-y-4 lg:col-span-1">
-              {/* Quick Actions */}
-              <Card className="p-5 hover:shadow-subtle transition">
-                <h2 className="text-xs font-bold uppercase tracking-[0.08em] text-pebble mb-3 font-circularxx">Quick Actions</h2>
-                <div className="grid grid-cols-3 gap-2">
-                  <Link 
-                    to="/student/complaint" 
-                    className="flex flex-col items-center justify-center p-3 rounded-[var(--radius-inputs)] bg-charcoal border border-charcoal hover:bg-charcoal/50 text-mist hover:text-fog text-xs font-medium text-center transition hover:scale-105"
-                  >
-                    <FaPlusCircle className="mb-1.5 text-pilot-gold" size={16} />
-                    <span>New Complaint</span>
-                  </Link>
-                  
-                  <Link 
-                    to="/student/complaints" 
-                    className="flex flex-col items-center justify-center p-3 rounded-[var(--radius-inputs)] bg-charcoal border border-charcoal hover:bg-charcoal/50 text-mist hover:text-fog text-xs font-medium text-center transition hover:scale-105"
-                  >
-                    <FaListUl className="mb-1.5 text-pilot-gold" size={16} />
-                    <span>My Feed</span>
-                  </Link>
-                  
-                  <Link 
-                    to="/profile" 
-                    className="flex flex-col items-center justify-center p-3 rounded-[var(--radius-inputs)] bg-charcoal border border-charcoal hover:bg-charcoal/50 text-mist hover:text-fog text-xs font-medium text-center transition hover:scale-105"
-                  >
-                    <FaUser className="mb-1.5 text-mist" size={16} />
-                    <span>Profile</span>
-                  </Link>
-                </div>
-              </Card>
-
-              {/* Tips Card */}
-              <Card className="p-5 bg-gradient-to-br from-charcoal to-graphite border border-charcoal text-fog shadow-subtle overflow-hidden relative min-h-[110px]">
-                <div className="absolute top-0 right-0 p-3 opacity-10 text-pilot-gold">
-                  <FaLightbulb size={48} />
-                </div>
-                
-                <div className="flex justify-between items-center mb-2 relative z-10 font-circularxx">
-                  <span className="text-[10px] font-bold uppercase tracking-[0.08em] text-pilot-gold flex items-center gap-1.5 font-circularxxmono">
-                    <FaLightbulb /> Support Tip
-                  </span>
-                  
-                  <div className="flex gap-1.5 text-[10px] text-mist font-circularxxmono">
-                    <button onClick={handlePrevTip} className="hover:text-fog transition cursor-pointer bg-transparent border-0 p-0">
-                      <FaChevronLeft />
-                    </button>
-                    <span>{tipIndex + 1}/{tips.length}</span>
-                    <button onClick={handleNextTip} className="hover:text-fog transition cursor-pointer bg-transparent border-0 p-0">
-                      <FaChevronRight />
-                    </button>
-                  </div>
-                </div>
-
-                <p className="text-xs leading-relaxed text-mist select-none relative z-10 font-medium font-circularxx">
-                  {tips[tipIndex]}
-                </p>
-              </Card>
+          <Card className="p-6">
+            <div className="mb-5 flex items-center justify-between gap-4">
+              <div>
+                <h2 className="flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.08em] text-fog">
+                  <FaBell className="text-pilot-gold" /> Notifications
+                </h2>
+                <p className="mt-1 text-xs text-pebble">Latest 3 alerts from your complaint feed.</p>
+              </div>
             </div>
 
-            {/* Complaint Progress Tracker Card */}
-            <Card className="p-6 hover:shadow-subtle transition lg:col-span-1 flex flex-col justify-between">
-              <div>
-                <h2 className="text-sm font-semibold tracking-[0.08em] text-fog uppercase font-circularxx mb-2 flex items-center gap-2">
-                  <FaInfoCircle className="text-pebble" /> Complaint Progress
-                </h2>
-                
-                {complaints.length === 0 ? (
-                  <div className="h-44 flex flex-col justify-center items-center text-center">
-                    <p className="text-pebble text-sm italic font-medium">No active complaints yet.</p>
-                  </div>
-                ) : (
-                  <div className="space-y-4">
-                    {/* Selector */}
-                    <div>
-                      <label className="block text-[10px] font-bold uppercase tracking-[0.08em] text-pebble mb-1 font-circularxxmono">
-                        Select Complaint
-                      </label>
-                      <select 
-                        value={selectedComplaintId} 
-                        onChange={handleComplaintChange}
-                        className="w-full text-xs font-semibold rounded-[var(--radius-inputs)] border border-charcoal bg-charcoal p-1.5 focus:outline-none focus:border-slate text-fog truncate font-circularxx"
-                      >
-                        {complaints.map((c) => (
-                          <option key={c._id} value={c._id} className="bg-graphite text-fog font-circularxx">
-                            {c.title}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-
-                    {selectedComplaint && (
-                      <div className="pt-2 space-y-4 font-circularxx">
-                        <div className="flex justify-between items-center text-xs">
-                          <span className="font-bold text-mist">Completion Estimate</span>
-                          <span className="font-semibold text-pilot-gold font-circularxxmono">
-                            {selectedProgress.percent}% Done
-                          </span>
-                        </div>
-
-                        {/* Progress Bar Line */}
-                        <div className="relative pt-1">
-                          <div className="overflow-hidden h-2 text-xs flex rounded-full bg-obsidian border border-charcoal/40">
-                            <div 
-                              style={{ width: `${selectedProgress.percent}%` }}
-                              className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-pilot-gold transition-all duration-500 ease-out"
-                            />
-                          </div>
-                        </div>
-
-                        {/* Steps timeline */}
-                        <div className="flex justify-between text-[10px] font-bold text-pebble font-circularxxmono">
-                          <span className={`${selectedProgress.step >= 1 ? "text-pilot-gold" : ""}`}>
-                            Pending
-                          </span>
-                          <span className={`${selectedProgress.step >= 2 ? "text-pilot-gold font-medium" : ""}`}>
-                            In Progress
-                          </span>
-                          <span className={`${selectedProgress.step >= 3 ? "text-pilot-gold" : ""}`}>
-                            Resolved
-                          </span>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                )}
+            {notifications.length === 0 ? (
+              <div className="flex min-h-[120px] flex-col items-center justify-center text-center">
+                <p className="text-sm font-medium text-mist">You are all caught up.</p>
+                <p className="mt-1 text-xs text-pebble">No notifications to show right now.</p>
               </div>
-
-              {selectedComplaint && (
-                <div className="mt-4 pt-3 border-t border-charcoal/40 flex items-center justify-between font-circularxx">
-                  <div className="flex items-center gap-1.5">
-                    <span className="text-[10px] text-pebble uppercase font-bold font-circularxxmono">Status:</span>
-                    <StatusBadge status={selectedComplaint.status} />
-                  </div>
-                  <Link 
-                    to={`/student/complaint/${selectedComplaint._id}`}
-                    className="text-[10px] font-bold text-pilot-gold hover:underline font-circularxxmono"
+            ) : (
+              <div className="grid gap-3 lg:grid-cols-3">
+                {notifications.map((notif, index) => (
+                  <Link
+                    key={`${notif.type}-${notif.date}-${index}`}
+                    to={`/student/complaint/${notif.complaintId}`}
+                    className="block rounded-[var(--radius-inputs)] border border-charcoal bg-charcoal/30 p-4 no-underline transition hover:border-slate hover:bg-charcoal/60"
                   >
-                    View Thread &rarr;
+                    <div className="flex items-start gap-3">
+                      <span className="mt-1.5 h-2.5 w-2.5 shrink-0 rounded-full bg-pilot-gold" />
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-baseline justify-between gap-2">
+                          <p className="truncate text-xs font-semibold text-fog">{notif.title}</p>
+                          <span className="shrink-0 font-circularxxmono text-[9px] uppercase tracking-[0.05em] text-pebble">
+                            {formatShortDate(notif.date)}
+                          </span>
+                        </div>
+                        <p className="mt-1 line-clamp-2 text-xs leading-5 text-mist">{notif.message}</p>
+                        <span className="mt-2 inline-block text-[10px] font-semibold uppercase tracking-[0.05em] text-pilot-gold">
+                          View Details
+                        </span>
+                      </div>
+                    </div>
                   </Link>
-                </div>
-              )}
-            </Card>
-
-          </div>
-
+                ))}
+              </div>
+            )}
+          </Card>
         </div>
       )}
     </PageShell>

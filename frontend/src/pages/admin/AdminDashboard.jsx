@@ -39,27 +39,25 @@ function AdminDashboard() {
   const [complaints, setComplaints] = useState([]);
   const [selectedComplaintId, setSelectedComplaintId] = useState(null);
 
-  const chartData = [
+  const statusItems = [
     {
       name: "Pending",
       value: stats.pending,
+      color: "#cab16a",
     },
     {
       name: "In Progress",
       value: stats.inProgress,
+      color: "#5b8def",
     },
     {
       name: "Resolved",
       value: stats.resolved,
+      color: "#89b482",
     },
-  ].filter(item => item.value > 0);
-
-  // Wonder Theme Colors: Stone (Pending), Pilot Gold (In Progress), Mist (Resolved)
-  const COLORS = [
-    "#57534e",
-    "#cab16a",
-    "#d6d3d1",
   ];
+
+  const chartData = statusItems.filter(item => item.value > 0);
 
   useEffect(() => {
     fetchDashboardData();
@@ -185,27 +183,79 @@ function AdminDashboard() {
                     <p className="text-sm text-pebble italic font-medium">No complaint statistics available.</p>
                   </div>
                 ) : (
-                  <div style={{ width: "100%", height: 200 }} className="relative flex justify-center items-center">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <PieChart>
-                        <Pie
-                          data={chartData}
-                          dataKey="value"
-                          nameKey="name"
-                          outerRadius={80}
-                          label={({ name, percent }) => `${name} (${(percent * 100).toFixed(0)}%)`}
-                          className="font-circularxxmono text-[10px] fill-fog"
-                        >
-                          {chartData.map((entry, index) => {
-                            let cellColor = COLORS[0];
-                            if (entry.name === "In Progress") cellColor = COLORS[1];
-                            if (entry.name === "Resolved") cellColor = COLORS[2];
-                            return <Cell key={index} fill={cellColor} />;
-                          })}
-                        </Pie>
-                        <Tooltip />
-                      </PieChart>
-                    </ResponsiveContainer>
+                  <div className="flex flex-col items-center gap-5">
+                    <div className="relative h-[220px] w-[220px] sm:h-[240px] sm:w-[240px]">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <PieChart margin={{ top: 0, right: 0, bottom: 0, left: 0 }}>
+                          <Pie
+                            data={chartData}
+                            dataKey="value"
+                            nameKey="name"
+                            innerRadius="62%"
+                            outerRadius="88%"
+                            paddingAngle={3}
+                            stroke="#1c1917"
+                            strokeWidth={3}
+                            isAnimationActive={false}
+                          >
+                            {chartData.map((entry) => (
+                              <Cell key={entry.name} fill={entry.color} />
+                            ))}
+                          </Pie>
+                          <Tooltip
+                            contentStyle={{
+                              background: "#1c1917",
+                              border: "1px solid #44403c",
+                              borderRadius: 8,
+                              color: "#e5e7eb",
+                            }}
+                            itemStyle={{ color: "#e5e7eb" }}
+                            formatter={(value, name) => [
+                              `${value} (${stats.total > 0 ? Math.round((value / stats.total) * 100) : 0}%)`,
+                              name,
+                            ]}
+                          />
+                        </PieChart>
+                      </ResponsiveContainer>
+
+                      <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center text-center">
+                        <span className="font-circularxxmono text-3xl font-bold text-fog">
+                          {stats.total}
+                        </span>
+                        <span className="mt-1 text-[10px] font-semibold uppercase tracking-[0.08em] text-pilot-gold">
+                          Total
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="grid w-full gap-2 sm:grid-cols-3">
+                      {statusItems.map((item) => {
+                        const percentage = stats.total > 0
+                          ? Math.round((item.value / stats.total) * 100)
+                          : 0;
+
+                        return (
+                          <div
+                            key={item.name}
+                            className="flex items-center justify-between gap-3 rounded-[var(--radius-inputs)] border border-charcoal bg-charcoal/45 px-3 py-2"
+                          >
+                            <div className="flex min-w-0 items-center gap-2">
+                              <span
+                                className="h-2.5 w-2.5 shrink-0 rounded-full"
+                                style={{ backgroundColor: item.color }}
+                              />
+                              <span className="truncate text-xs font-semibold text-mist">
+                                {item.name}
+                              </span>
+                            </div>
+                            <div className="shrink-0 text-right font-circularxxmono">
+                              <div className="text-xs font-bold text-fog">{item.value}</div>
+                              <div className="text-[10px] text-pilot-gold">{percentage}%</div>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
                   </div>
                 )}
               </Card>
